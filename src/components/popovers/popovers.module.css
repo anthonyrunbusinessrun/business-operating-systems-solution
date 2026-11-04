@@ -45,7 +45,7 @@
   gap: 8px;
   font-size: 13px;
   font-weight: 600;
-  color: #fff;
+  color: var(--text-primary);
 }
 .titleLg {
   font-size: 15px;
@@ -57,7 +57,7 @@
   place-items: center;
 }
 .headerLink {
-  color: var(--accent-cyan);
+  color: var(--accent-text);
   font-size: 12px;
   font-weight: 600;
 }
@@ -70,15 +70,15 @@
   font-weight: 600;
 }
 .headerAction:hover {
-  color: #fff;
+  color: var(--text-primary);
 }
 .closeBtn {
   display: inline-grid;
   place-items: center;
-  color: #9ec3df;
+  color: var(--icon-inline);
 }
 .closeBtn:hover {
-  color: #fff;
+  color: var(--text-primary);
 }
 
 .search {
@@ -94,7 +94,7 @@
   background: var(--bg-input);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
-  color: #fff;
+  color: var(--text-primary);
   font-size: 13px;
   outline: none;
 }
@@ -102,7 +102,7 @@
   color: var(--text-muted);
 }
 .searchInput:focus {
-  border-color: var(--accent-cyan);
+  border-color: var(--accent);
 }
 .searchIcon {
   position: absolute;
@@ -136,11 +136,11 @@
   padding: 0 9px;
   border-radius: 6px;
   font-size: 13px;
-  color: #fff;
+  color: var(--text-primary);
   text-align: left;
 }
 .fieldItem:hover {
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--bg-faint);
 }
 .fieldIcon {
   color: var(--text-secondary);
@@ -164,12 +164,12 @@
   height: 100%;
   border: 0;
   background: transparent;
-  color: #fff;
+  color: var(--text-primary);
   font-size: 13px;
   outline: none;
 }
 .managerSearch::placeholder {
-  color: #7f95c0;
+  color: var(--text-secondary);
 }
 .managerList {
   overflow-y: auto;
@@ -182,17 +182,17 @@
   align-items: center;
   gap: 10px;
   height: 30px;
-  color: #fff;
+  color: var(--text-primary);
   font-size: 13px;
 }
 .managerRow .fieldIcon {
-  color: #fff;
+  color: var(--text-primary);
 }
 .managerLabel {
   flex: 1;
 }
 .grip {
-  color: #3b5379;
+  color: var(--text-muted);
   display: inline-grid;
   place-items: center;
 }
@@ -207,13 +207,13 @@
   flex: 1;
   height: 32px;
   border-radius: var(--radius-md);
-  background: #1e3a5f;
-  color: #fff;
+  background: var(--border-subtle);
+  color: var(--text-primary);
   font-size: 12.5px;
   font-weight: 600;
 }
 .footBtn:hover {
-  background: #264a78;
+  background: var(--bg-raised);
 }
 
 /* Toggle switch */
@@ -222,7 +222,7 @@
   width: 32px;
   height: 16px;
   border-radius: 999px;
-  background: #2b3f5e;
+  background: var(--bg-raised);
   flex: none;
   transition: background-color 0.15s;
 }
@@ -234,11 +234,11 @@
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: #f2f5fa;
+  background: #f5f7fa; /* the knob is light in every theme */
   transition: transform 0.15s;
 }
 .toggleOn {
-  background: #1565c0;
+  background: var(--solid);
 }
 .toggleOn::after {
   transform: translateX(16px);
@@ -257,12 +257,12 @@
   flex: none;
 }
 .bannerIcon {
-  color: var(--accent-cyan);
+  color: var(--accent-text);
   flex: none;
   margin-top: 2px;
 }
 .bannerStrong {
-  color: #fff;
+  color: var(--text-primary);
   font-weight: 700;
 }
 .filterBody {
@@ -277,7 +277,7 @@
   gap: 8px;
   font-size: 14px;
   font-weight: 700;
-  color: #fff;
+  color: var(--text-primary);
 }
 .prompt {
   position: relative;
@@ -287,7 +287,7 @@
 .promptIcon {
   position: absolute;
   left: 12px;
-  color: var(--accent-cyan);
+  color: var(--accent-text);
 }
 .promptInput {
   width: 100%;
@@ -296,7 +296,7 @@
   background: var(--bg-input);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
-  color: #fff;
+  color: var(--text-primary);
   font-size: 13px;
   outline: none;
 }
@@ -304,7 +304,7 @@
   color: var(--text-muted);
 }
 .promptInput:focus {
-  border-color: var(--accent-cyan);
+  border-color: var(--accent);
 }
 .muted {
   color: var(--text-secondary);
@@ -339,7 +339,7 @@
   background: var(--bg-input);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
-  color: #fff;
+  color: var(--text-primary);
   font-size: 12.5px;
 }
 .selectField {
@@ -364,11 +364,11 @@
   height: 30px;
   border-radius: var(--radius-md);
   background: var(--bg-input);
-  color: var(--brand-red);
+  color: var(--primary-text);
   flex: none;
 }
 .condDelete:hover {
-  background: #1a2540;
+  background: var(--bg-raised);
 }
 .filterFoot {
   display: flex;
@@ -388,19 +388,19 @@
   font-weight: 600;
 }
 .ghostLink:hover {
-  color: #fff;
+  color: var(--text-primary);
 }
 .cb {
   width: 18px;
   height: 18px;
   border-radius: 4px;
-  border: 1.5px solid #2f4a72;
+  border: 1.5px solid var(--border-strong);
   display: inline-grid;
   place-items: center;
-  color: var(--accent-cyan);
+  color: var(--accent-text);
 }
 .cbOn {
-  border-color: var(--accent-cyan);
+  border-color: var(--accent);
 }
 
 /* ---------- Color / Share-and-sync ---------- */
@@ -422,12 +422,12 @@
   width: 100%;
 }
 .option:hover {
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--bg-faint);
 }
 .optionActive,
 .optionActive:hover {
-  background: #0a344d;
-  border-color: #124a69;
+  background: var(--accent-bg);
+  border-color: var(--accent-border);
 }
 .optionIcon {
   display: inline-grid;
@@ -441,18 +441,18 @@
 }
 .optionActive .optionIcon {
   background: var(--bg-surface);
-  color: var(--accent-cyan);
+  color: var(--accent-text);
 }
 .optionTitle {
   display: block;
   font-size: 13.5px;
   font-weight: 600;
-  color: #e8f1fb;
+  color: var(--text-cell);
 }
 .optionSub {
   display: block;
   font-size: 12px;
-  color: #7f95b0;
+  color: var(--text-secondary);
   margin-top: 2px;
 }
 
@@ -467,17 +467,17 @@
   height: 38px;
   padding: 0 12px;
   font-size: 13px;
-  color: #fff;
+  color: var(--text-primary);
   text-align: left;
 }
 .menuItem + .menuItem {
   border-top: 1px solid transparent;
 }
 .menuItem:hover {
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--bg-faint);
 }
 .menuSep {
-  border-top: 1px solid #152d4d;
+  border-top: 1px solid var(--divider-soft);
 }
 .menuIcon {
   color: var(--text-secondary);
@@ -492,9 +492,9 @@
 .notice {
   margin: 12px 12px 10px;
   padding: 12px 14px 14px;
-  border: 1px solid #3a86c8;
+  border: 1px solid var(--info);
   border-radius: 8px;
-  background: #11264a;
+  background: var(--bg-raised);
   font-size: 13px;
   line-height: 1.5;
   color: var(--text-secondary);
@@ -504,10 +504,10 @@
   gap: 8px;
 }
 .noticeStrong {
-  color: #fff;
+  color: var(--text-primary);
 }
 .noticeLink {
-  color: var(--accent-cyan);
+  color: var(--accent-text);
   text-decoration: underline;
 }
 .noticeActions {
@@ -526,8 +526,8 @@
   height: 30px;
   padding: 0 14px;
   border-radius: 6px;
-  background: #3a86c8;
-  color: #fff;
+  background: var(--info);
+  color: var(--text-on-solid);
   font-size: 13px;
   font-weight: 600;
 }
@@ -565,7 +565,7 @@
 }
 .tabActive {
   font-weight: 600;
-  color: #fff;
+  color: var(--text-primary);
 }
 .tabActive::after {
   content: "";
@@ -575,7 +575,7 @@
   bottom: -1px;
   height: 3px;
   border-radius: 3px 3px 0 0;
-  background: var(--brand-red);
+  background: var(--primary);
 }
 .emailInput {
   width: 100%;
@@ -584,7 +584,7 @@
   background: var(--bg-input);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
-  color: #fff;
+  color: var(--text-primary);
   font-size: 13px;
   outline: none;
 }
@@ -592,7 +592,7 @@
   color: var(--text-muted);
 }
 .emailInput:focus {
-  border-color: var(--accent-cyan);
+  border-color: var(--accent);
 }
 .sectionLabel {
   font-size: 11px;
@@ -606,7 +606,7 @@
   align-items: center;
   gap: 16px;
   width: 100%;
-  color: #fff;
+  color: var(--text-primary);
   font-size: 14px;
 }
 .stack {
@@ -618,7 +618,7 @@
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  color: #fff;
+  color: var(--text-primary);
   font-size: 11px;
   font-weight: 700;
   border: 1px solid var(--bg-surface);
@@ -660,14 +660,14 @@
   flex: none;
 }
 .iconBtnDanger {
-  color: var(--brand-red);
+  color: var(--primary-text);
 }
 .cyanLink {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   width: fit-content;
-  color: var(--accent-cyan);
+  color: var(--accent-text);
   font-size: 13px;
   font-weight: 600;
 }
@@ -682,7 +682,7 @@
   font-size: 12.5px;
 }
 .panelFoot a {
-  color: var(--accent-cyan);
+  color: var(--accent-text);
   text-decoration: underline;
 }
 
@@ -692,7 +692,7 @@
   align-items: center;
   gap: 12px;
   padding: 14px;
-  border-bottom: 1px solid #e5e5e5;
+  border-bottom: 1px solid var(--divider);
 }
 .profileAvatar {
   display: inline-grid;
@@ -700,9 +700,9 @@
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  background: #c62828;
-  border: 2px solid #ef4444;
-  color: #fff;
+  background: var(--primary);
+  border: 2px solid var(--primary-hover);
+  color: var(--text-on-primary);
   font-size: 13px;
   font-weight: 700;
   flex: none;
@@ -710,19 +710,19 @@
 .profileName {
   font-size: 14px;
   font-weight: 700;
-  color: #fff;
+  color: var(--text-primary);
   line-height: 1.2;
 }
 .profileEmail {
   font-size: 12px;
-  color: #4d6485;
+  color: var(--text-muted);
   line-height: 1.3;
 }
 .profileGroup {
   padding: 6px 8px;
 }
 .profileGroup + .profileGroup {
-  border-top: 1px solid #e5e5e5;
+  border-top: 1px solid var(--divider);
 }
 .profileItem {
   display: flex;
@@ -733,27 +733,27 @@
   padding: 0 12px;
   border-radius: 8px;
   font-size: 13px;
-  color: #fff;
+  color: var(--text-primary);
   text-align: left;
 }
 .profileItem:hover {
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--bg-faint);
 }
 .profileItem .menuIcon {
-  color: #64748b;
+  color: var(--text-muted);
 }
 .profileActive,
 .profileActive:hover {
-  background: #152d41;
-  color: var(--brand-red);
+  background: var(--bg-selected);
+  color: var(--primary-text);
   font-weight: 700;
 }
 .profileActive .menuIcon {
-  color: var(--brand-red);
+  color: var(--primary-text);
 }
 .profileDanger,
 .profileDanger .menuIcon {
-  color: var(--brand-red);
+  color: var(--primary-text);
 }
 .planBadge {
   display: inline-flex;
@@ -778,8 +778,8 @@
   height: 20px;
   padding: 0 5px;
   border-radius: 4px;
-  background: #0d1b33;
-  color: #64748b;
+  background: var(--bg-inset);
+  color: var(--text-muted);
   font-size: 11px;
   font-weight: 600;
 }
@@ -807,7 +807,7 @@
   background: var(--bg-input);
   border: 1px solid var(--border-subtle);
   font-size: 13px;
-  color: #fff;
+  color: var(--text-primary);
 }
 .sortRuleName {
   flex: 1;
@@ -823,12 +823,12 @@
   height: 26px;
   padding: 0 8px;
   border-radius: 6px;
-  color: var(--accent-cyan);
+  color: var(--accent-text);
   font-size: 12px;
   font-weight: 600;
 }
 .dirBtn:hover {
-  background: rgba(0, 236, 252, 0.08);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
 }
 .dirRemove {
   display: inline-grid;
@@ -839,8 +839,8 @@
   color: var(--text-secondary);
 }
 .dirRemove:hover {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-primary);
+  background: var(--bg-hover);
 }
 .fieldItemOff {
   opacity: 0.45;
@@ -863,7 +863,7 @@
   outline: none;
 }
 .valueInput:focus {
-  border-color: var(--accent-cyan);
+  border-color: var(--accent);
 }
 .valueInput::placeholder {
   color: var(--text-muted);

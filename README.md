@@ -196,6 +196,39 @@ field/view definitions and backfills. It is idempotent and non-destructive: defi
 missing, user edits are never overwritten, and nothing is deleted. Sample content (capabilities, inventory
 details, voucher details) is added to **fresh databases only**.
 
+## Themes (Skin Library)
+
+A palette button in the navbar, between the search box and the account menu, opens the **Skin Library**: eight coordinated
+themes, applied to the whole system at once (no reload) and saved to the signed-in account.
+
+| Theme | Direction | Primary | Page | Text on it |
+| --- | --- | --- | --- | --- |
+| **BOSS Yellow** (default) | light, warm neutral backgrounds, yellow as the action color | `#f5be00` | `#faf8f1` | dark |
+| **BOSS White** | clean, minimal; ink-black actions | `#111827` | `#ffffff` | dark |
+| **BOSS Purple** | deep violet | `#7c3aed` | `#140c22` | light |
+| **BOSS Red** | the original BOSS look, value for value | `#cf0e38` | `#051424` | light |
+| **BOSS Blue** | light workspace framed by a dark blue navbar, tabs and sidebar | `#1d4ed8` | `#f6f8fc` | dark (light on the frame) |
+| **BOSS Green** | balanced green on neutral backgrounds | `#15803d` | `#f7f8f5` | dark |
+| **BOSS Orange** | warm orange on dark neutral components | `#f97316` | `#131315` | light |
+| **BOSS Midnight** | deep navy with bright accents | `#2f5fe8` | `#070c1f` | light |
+
+**How it is built**
+
+- `src/lib/theme/themes.ts` is the only place colors are defined. Each theme is a handful of chosen colors; `buildTokens` turns them
+  into ~90 CSS variables (`--bg-surface`, `--text-body`, `--primary`, `--text-on-primary`, `--success-text`, `--tone-blue-bg`, …).
+  Anything that must be readable (text on a surface, text on the primary color, status colors on their tints, chip labels) is
+  derived with a contrast solver (`src/lib/theme/color.ts`), so it reaches WCAG AA (4.5 : 1) by construction.
+- `<ThemeStyles />` writes every theme as a `[data-theme="…"]` block; `<html data-theme>` selects one. Stylesheets and components use
+  the variables only: there are no per-theme stylesheets and no hardcoded theme colors. (The voucher document is white "paper" in every
+  theme, and the avatar / plan badges keep fixed identity colors.)
+- A theme with its own chrome (Blue) re-declares the text / border / input variables inside `.boss-chrome` (navbar, tabs, sidebar);
+  popovers opened from the navbar carry `data-boss-surface` and go back to the page colors.
+- **Saving:** `GET` / `PUT /api/base/preferences` (signed-in accounts only, same-site only, the id is validated against the theme list) store
+  the choice in `boss_user_preferences`. The theme id is also written to the `boss-theme` cookie, so the server renders the right theme
+  from the first byte (no flash). Signing in puts the account's saved theme in that cookie; if a browser's cookie disagrees with the account,
+  the account wins. Other open browser tabs follow a change at once. If saving fails, the theme still applies on this device and a message says so.
+- **Add a theme:** add a `Spec` to `SPECS` in `themes.ts` and its id to `THEME_IDS`. `npm test` then checks its contrast.
+
 ## Tests
 
 | Suite | What it covers |
@@ -206,6 +239,9 @@ details, voucher details) is added to **fresh databases only**.
 | `src/server/base/features.test.ts` | real PostgreSQL: automatic codes (incl. 12 parallel creates), Forms Style (Work / Vouchers), the fixed voucher PDF and removal of PDF generation, server filtering parity with the browser |
 | original suites | AIS accounting logic, table state, record forms |
 | `qa/e2e-update2.py` | browser: Create menu, automatic Code, the fixed voucher PDF (shown for every row, download, nothing generated), form categories, filtering in every view type, server-side filtering |
+| `src/lib/theme/theme.test.ts` | the eight themes, token completeness, WCAG AA for every text / button / status / chip pair in every theme (and Blue's dark chrome), Yellow's "professional" rules, Red's original values, theme CSS and id validation |
+| `src/server/base/preferences.test.ts` | real PostgreSQL: saving / reading the theme per account, validation, sign-in and same-site rules, retired ids, a database without the table |
+| `qa/e2e-theme.py` | browser: selector placement and keyboard use, all 8 themes applied without reload, components following the tokens, persistence across reload / login / tabs, failed saves, bad cookies, screen sizes, rendered contrast in every theme |
 | `qa/base-e2e.py` | browser: navigation, all view types, create / rename / duplicate / delete, sections and drag-and-drop, favorites, inline editing, fields, forms, Team Profile, Folio, Voucher, Items, Capabilities |
 
 See `NEEDS_CLARIFICATION.md` for assumptions and open questions.

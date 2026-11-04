@@ -1,38 +1,6 @@
-/* BOSS design tokens — values from the BOSS design system, refined by
-   pixel sampling of the supplied screens (see /docs/DESIGN_NOTES.md). */
+/* BOSS design tokens. Colors are NOT defined here: they come from the active theme (src/lib/theme/themes.ts), emitted as
+   [data-theme="…"] blocks by <ThemeStyles />. Only theme-independent tokens live in this file. */
 :root {
-  /* Surfaces */
-  --bg-page: #050a1a;
-  --bg-app: #051424;
-  --bg-tabs: #05102a;
-  --bg-surface: #0b1f3a;
-  --bg-input: #0f172a;
-  --bg-row-alt: #0b1220;
-  --bg-selected: #152d41;
-  --border-subtle: #1e3a5f;
-
-  /* Brand */
-  --brand-red: #cf0e38;
-  --brand-red-hover: #dc2040;
-  --brand-red-dark: #b70f36;
-  --accent-cyan: #00ecfc;
-  --accent-cyan-bg: #052a3a;
-  --accent-blue: #1565c0;
-  --accent-link: #5a9fca;
-
-  /* Text */
-  --text-primary: #ffffff;
-  --text-cell: #f2f5fa;
-  --text-body: #e2e8f0;
-  --text-secondary: #94a3b8;
-  --text-dim: #6b8fad;
-  --text-muted: #64748b;
-  --icon-inline: #9ac0da;
-
-  /* Status */
-  --success: #22c55e;
-  --danger: #cf0e38;
-
   /* Type */
   --font-sans: "Inter Variable", "Inter", -apple-system, "Segoe UI", sans-serif;
 
@@ -41,11 +9,6 @@
   --radius-md: 8px;
   --radius-lg: 16px;
   --radius-pill: 999px;
-
-  /* Elevation */
-  --shadow-card: 0 20px 50px rgba(0, 0, 0, 0.45);
-  --shadow-popover: 0 24px 48px rgba(0, 0, 0, 0.5);
-  --shadow-glow-red: 0 0 16px rgba(207, 14, 56, 0.35);
 
   /* Layout */
   --header-h: 62px;
@@ -68,6 +31,7 @@ body {
 body {
   background: var(--bg-page);
   color: var(--text-body);
+  transition: background-color 0.2s ease, color 0.2s ease;
   font-family: var(--font-sans);
   font-size: 13px;
   line-height: 1.4;
@@ -109,13 +73,13 @@ ul {
 }
 
 :focus-visible {
-  outline: 2px solid rgba(0, 236, 252, 0.6);
+  outline: 2px solid color-mix(in srgb, var(--accent) 70%, transparent);
   outline-offset: 2px;
 }
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: #2a4163 transparent;
+  scrollbar-color: var(--scrollbar-thumb) transparent;
 }
 
 @media (prefers-reduced-motion: reduce) {

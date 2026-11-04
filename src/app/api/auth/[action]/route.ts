@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import { authClient, currentUser } from '@/server/auth/server';
 import { authorizedUser, isAdminEmail, trustedOrigin } from '@/server/auth/policy';
+import { requireDb } from '@/lib/db';
+import { readUserTheme } from '@/server/base/preferences';
+import { THEME_COOKIE } from '@/lib/theme/themes';
 
 export const dynamic = 'force-dynamic';
 const reply = (body: unknown, status = 200) => NextResponse.json(body, {
@@ -26,7 +29,13 @@ export async function POST(request: Request, { params }: { params: Promise<{ act
         if (data.session) await client.auth.signOut({ scope: 'local' });
         return reply({ error: 'Email or password is incorrect, or access has not been approved.' }, 401);
       }
-      return reply({ ok: true });
+      const response = reply({ ok: true });
+      // The account's saved theme is put in this browser's theme cookie, so the very first page after signing in is already in it.
+      try {
+        const theme = await readUserTheme(requireDb(), data.user.id);
+        if (theme) response.cookies.set(THEME_COOKIE, theme, { path: '/', maxAge: 31536000, sameSite: 'lax', httpOnly: false });
+      } catch { /* no database or table yet: the default theme applies */ }
+      return response;
     }
     if (action === 'recover') {
       // The same response avoids revealing the access list. Supabase enforces email rate limits.

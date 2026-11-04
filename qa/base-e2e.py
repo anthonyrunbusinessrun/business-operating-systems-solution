@@ -109,6 +109,12 @@ def close_panels():
     for _ in range(3):
         if page.locator("[role=dialog][data-floating-level]").count(): page.keyboard.press("Escape"); page.wait_for_timeout(150)
 
+def goto_month(label):
+    """Moves the calendar back to the month named `label` (the calendar opens on the current month, which depends on the date)."""
+    for _ in range(18):
+        if page.get_by_role("heading", name=label).count(): return
+        page.get_by_role("button", name="Previous month").click(); page.wait_for_timeout(120)
+
 def count_records(table):
     return page.evaluate("async t => (await (await fetch('/api/base/tables/' + t)).json()).records.length", table)
 
@@ -151,7 +157,7 @@ with sync_playwright() as p:
     go("/profiles")
     def nav():
         tabs = [t.inner_text() for t in page.locator('nav[aria-label=Primary] a').all()]
-        assert tabs == ["Profiles", "Categories", "Folios", "Actions", "Vouchers", "Transactions", "Items", "Forms", "Concepts", "Capabilities", "Leads"], tabs
+        assert tabs == ["Multiplexer\nShared", "Profiles", "Categories", "Folios", "Actions", "Vouchers", "Transactions", "Items", "Forms", "Concepts", "Capabilities", "Leads"], tabs
         for gone in ["BOSS", "AIS", "Packet", "Accounts", "Registries"]:
             assert gone not in tabs
     check("navigation: removed tabs are gone, others remain", nav)
@@ -256,8 +262,8 @@ with sync_playwright() as p:
     def calendar_move():
         sidebar().get_by_role("button", name=names["Calendar"], exact=True).click()
         page.wait_for_selector("[role=gridcell]")
-        # data is July 2026: navigate back from October 2026
-        for _ in range(3): page.get_by_role("button", name="Previous month").click()
+        # the data is July 2026: go back from the current month, whichever it is
+        goto_month("July 2026")
         expect(page.get_by_role("heading", name="July 2026")).to_be_visible()
         chip = page.locator("button[draggable=true]", has_text="A-4542").first
         assert chip.is_visible()
@@ -269,7 +275,7 @@ with sync_playwright() as p:
 
     def calendar_create():
         sidebar().get_by_role("button", name=names["Calendar"], exact=True).click()
-        for _ in range(3): page.get_by_role("button", name="Previous month").click()
+        goto_month("July 2026")
         cell = page.locator('[role=gridcell][aria-label="2026-07-22"]')
         cell.hover(); cell.get_by_role("button", name="Add record on 2026-07-22").click()
         dlg = page.get_by_role("dialog")

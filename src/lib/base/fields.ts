@@ -1,17 +1,17 @@
 import type { AttachmentValue, Choice, ChoiceColor, FieldDef, FieldOptions, FieldType } from "./types";
 import { CHOICE_COLORS } from "./types";
 
-/** Chip colours tuned for the BOSS dark surfaces (backgrounds are deep, text is light). */
+/** Chip colors of select fields. The values come from the active theme (`--tone-*` tokens), so chips stay readable in every skin. */
 export const CHOICE_TONES: Record<ChoiceColor, { bg: string; fg: string; border: string }> = {
-  blue: { bg: "#10305c", fg: "#9cc7ff", border: "#1d4f93" },
-  cyan: { bg: "#08404b", fg: "#7be9f5", border: "#0e6b7b" },
-  green: { bg: "#0f3d2a", fg: "#74e0a5", border: "#1a6a49" },
-  yellow: { bg: "#453a0b", fg: "#f4d96a", border: "#7a6613" },
-  orange: { bg: "#4b2509", fg: "#ffb26b", border: "#8a4510" },
-  red: { bg: "#4d0f1f", fg: "#ff8ea3", border: "#8c1a35" },
-  pink: { bg: "#4a1240", fg: "#ff9be3", border: "#80206f" },
-  purple: { bg: "#2f1f66", fg: "#c4b0ff", border: "#4f35a6" },
-  gray: { bg: "#273448", fg: "#c3cedd", border: "#3d4d66" },
+  blue: { bg: "var(--tone-blue-bg)", fg: "var(--tone-blue-fg)", border: "var(--tone-blue-border)" },
+  cyan: { bg: "var(--tone-cyan-bg)", fg: "var(--tone-cyan-fg)", border: "var(--tone-cyan-border)" },
+  green: { bg: "var(--tone-green-bg)", fg: "var(--tone-green-fg)", border: "var(--tone-green-border)" },
+  yellow: { bg: "var(--tone-yellow-bg)", fg: "var(--tone-yellow-fg)", border: "var(--tone-yellow-border)" },
+  orange: { bg: "var(--tone-orange-bg)", fg: "var(--tone-orange-fg)", border: "var(--tone-orange-border)" },
+  red: { bg: "var(--tone-red-bg)", fg: "var(--tone-red-fg)", border: "var(--tone-red-border)" },
+  pink: { bg: "var(--tone-pink-bg)", fg: "var(--tone-pink-fg)", border: "var(--tone-pink-border)" },
+  purple: { bg: "var(--tone-purple-bg)", fg: "var(--tone-purple-fg)", border: "var(--tone-purple-border)" },
+  gray: { bg: "var(--tone-gray-bg)", fg: "var(--tone-gray-fg)", border: "var(--tone-gray-border)" },
 };
 
 export interface FieldTypeInfo {

@@ -134,7 +134,7 @@ export function Sidebar({ config, onCta }: { config: SidebarConfig; onCta?: () =
   } as CSSProperties;
 
   return (
-    <aside className={styles.sidebar} style={style} aria-label="Views">
+    <aside className={`${styles.sidebar} boss-chrome`} style={style} aria-label="Views">
       <Button size="block" glow={config.ctaGlow} icon={<Plus size={16} strokeWidth={2.5} />} onClick={onCta}>
         {config.cta}
       </Button>

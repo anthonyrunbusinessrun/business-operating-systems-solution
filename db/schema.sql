@@ -164,3 +164,12 @@ CREATE TABLE IF NOT EXISTS boss_counters (
   next_value BIGINT NOT NULL,
   PRIMARY KEY (table_slug, key)
 );
+
+-- Per-user preferences (so far: the selected theme of the Skin Library). Additive; keyed by the signed-in account's id.
+-- The theme id is validated by the application against its theme list, so new themes need no schema change.
+CREATE TABLE IF NOT EXISTS boss_user_preferences (
+  user_id TEXT PRIMARY KEY,
+  theme TEXT NOT NULL,
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  CONSTRAINT boss_user_preferences_theme_shape CHECK (theme ~ '^[a-z]{3,24}$')
+);

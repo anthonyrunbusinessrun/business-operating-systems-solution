@@ -44,8 +44,8 @@
   transition: border-color 0.12s, background-color 0.12s;
 }
 .kpiLink:hover {
-  border-color: #2b4f7d;
-  background: #0d2444;
+  border-color: var(--border-strong);
+  background: var(--bg-raised);
 }
 .kpiLabel {
   font-size: 11px;
@@ -59,7 +59,7 @@
   font-size: 22px;
   font-weight: 700;
   letter-spacing: -0.01em;
-  color: #fff;
+  color: var(--text-primary);
   font-variant-numeric: tabular-nums;
 }
 .kpiNote {
@@ -68,11 +68,11 @@
   color: var(--text-secondary);
 }
 .up {
-  color: var(--success);
+  color: var(--success-text);
   font-weight: 600;
 }
 .down {
-  color: #ff4d6a;
+  color: var(--danger-text);
   font-weight: 600;
 }
 .neutral {
@@ -96,7 +96,7 @@
   margin: 0;
   font-size: 15px;
   font-weight: 700;
-  color: #fff;
+  color: var(--text-primary);
 }
 .panelSub {
   margin-top: 3px;
@@ -120,14 +120,14 @@
   position: relative;
   height: 190px;
   margin-top: 38px;
-  border-bottom: 1px solid #2a4170;
+  border-bottom: 1px solid var(--border-strong);
 }
 .gridLine {
   position: absolute;
   left: 0;
   right: 0;
   height: 1px;
-  background: #16294a;
+  background: var(--bg-raised);
 }
 .gridLabel {
   position: absolute;
@@ -153,7 +153,7 @@
   border-radius: 4px;
 }
 .group:hover {
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--bg-faint);
 }
 .bar {
   width: clamp(14px, 3vw, 32px);
@@ -162,10 +162,10 @@
   transition: height 0.25s ease-out;
 }
 .barRev {
-  background: #2fc43f;
+  background: var(--success);
 }
 .barExp {
-  background: #d9112f;
+  background: var(--danger);
 }
 .months {
   display: flex;
@@ -190,7 +190,7 @@
 .track {
   height: 9px;
   border-radius: 5px;
-  background: #162a4d;
+  background: var(--bg-raised);
   overflow: hidden;
 }
 .fill {
@@ -202,7 +202,7 @@
   text-align: right;
   font-variant-numeric: tabular-nums;
   font-weight: 600;
-  color: #fff;
+  color: var(--text-primary);
 }
 .attention {
   display: flex;
@@ -213,7 +213,7 @@
   align-items: flex-start;
   gap: 12px;
   padding: 10px 0;
-  border-top: 1px solid #1a2d52;
+  border-top: 1px solid var(--divider);
   font-size: 13px;
   line-height: 1.45;
   color: var(--text-cell);
@@ -226,7 +226,7 @@
   border-radius: 50%;
 }
 .attentionLink {
-  color: #ff6b84;
+  color: var(--danger-text);
   font-weight: 600;
 }
 .attentionLink:hover {
@@ -236,8 +236,8 @@
   min-width: 22px;
   padding: 2px 8px;
   border-radius: var(--radius-pill);
-  background: #f5b800;
-  color: #1a1400;
+  background: var(--warning);
+  color: var(--text-on-warning);
   font-size: 12px;
   font-weight: 700;
   text-align: center;
@@ -268,7 +268,7 @@
   margin-top: 6px;
   font-size: 18px;
   font-weight: 700;
-  color: #fff;
+  color: var(--text-primary);
 }
 .tileNote {
   margin-top: 5px;

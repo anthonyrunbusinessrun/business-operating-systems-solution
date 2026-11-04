@@ -3,8 +3,8 @@
 .wrap {
   position: relative;
   width: 100%;
-  background: var(--t-row-a, #0f172a);
-  border: 1px solid var(--t-border, #1e3a5f);
+  background: var(--t-row-a, var(--bg-input));
+  border: 1px solid var(--t-border, var(--border-subtle));
   border-radius: var(--t-radius, 8px 8px 0 0);
   overflow: clip;
 }
@@ -13,7 +13,7 @@
   border-collapse: separate;
   border-spacing: 0;
   table-layout: fixed;
-  color: var(--t-cell-color, #f2f5fa);
+  color: var(--t-cell-color, var(--text-cell));
   font-size: 13px;
 }
 
@@ -39,9 +39,9 @@
   z-index: 3;
   height: calc(var(--t-head-h, 36px) + var(--t-head-bw, 1px));
   padding: 0 16px 0 0;
-  background: var(--t-head-bg, #0b1f3a);
-  border-bottom: var(--t-head-bw, 1px) solid var(--t-head-border, #1e3a5f);
-  color: var(--t-head-color, #94a3b8);
+  background: var(--t-head-bg, var(--bg-surface));
+  border-bottom: var(--t-head-bw, 1px) solid var(--t-head-border, var(--border-subtle));
+  color: var(--t-head-color, var(--text-secondary));
   font-size: var(--t-head-size, 11px);
   font-weight: var(--t-head-weight, 600);
   letter-spacing: var(--t-head-ls, 0.06em);
@@ -71,16 +71,16 @@
   white-space: normal;
 }
 .rowA .td {
-  background: var(--t-row-a, #0f172a);
+  background: var(--t-row-a, var(--bg-input));
 }
 .rowB .td {
-  background: var(--t-row-b, #0b1220);
+  background: var(--t-row-b, var(--bg-row-alt));
 }
 .row:hover .td {
-  background-image: linear-gradient(rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.035));
+  background-image: linear-gradient(var(--bg-faint), var(--bg-faint));
 }
 .rowSelected .td {
-  background-color: var(--t-selected-bg, #152d41);
+  background-color: var(--t-selected-bg, var(--bg-selected));
 }
 .rowSelected .td:first-child {
   box-shadow: inset 3px 0 0 var(--t-selected-bar, transparent);
@@ -90,14 +90,14 @@
 .groupTd {
   height: calc(var(--t-group-h, 34px) + var(--t-group-bw, 1px));
   padding: 0 16px;
-  background: var(--t-group-bg, #0b1220);
-  border-bottom: var(--t-group-bw, 1px) solid var(--t-group-border, #1e3a5f);
+  background: var(--t-group-bg, var(--bg-row-alt));
+  border-bottom: var(--t-group-bw, 1px) solid var(--t-group-border, var(--border-subtle));
 }
 .groupBtn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  color: var(--t-group-color, #fff);
+  color: var(--t-group-color, var(--text-primary));
   font-size: var(--t-group-size, 12px);
   font-weight: var(--t-group-weight, 700);
   letter-spacing: var(--t-group-ls, 0);
@@ -105,7 +105,7 @@
   white-space: nowrap;
 }
 .chev {
-  color: var(--t-chev, #38bdf8);
+  color: var(--t-chev, var(--accent-text));
   transition: transform 0.15s;
 }
 .chevClosed {
@@ -116,22 +116,22 @@
 .sumTd {
   height: calc(var(--t-sum-h, 28px) + var(--t-group-bw, 1px));
   padding: 0 16px 0 0;
-  background: var(--t-sum-bg, #0f172a);
-  border-bottom: var(--t-group-bw, 1px) solid var(--t-group-border, #1e3a5f);
+  background: var(--t-sum-bg, var(--bg-input));
+  border-bottom: var(--t-group-bw, 1px) solid var(--t-group-border, var(--border-subtle));
   font-size: 12px;
   font-weight: 700;
-  color: #fff;
+  color: var(--text-primary);
   white-space: nowrap;
 }
 .sumLabel {
-  color: var(--t-sum-label, #94a3b8);
+  color: var(--t-sum-label, var(--text-secondary));
   font-weight: 600;
 }
 .addTd {
   height: calc(var(--t-add-h, 34px) + var(--t-add-bw, 1px));
   padding: 0 16px;
-  background: var(--t-add-bg, #0f172a);
-  border-bottom: var(--t-add-bw, 1px) solid var(--t-add-border, var(--t-group-border, #1e3a5f));
+  background: var(--t-add-bg, var(--bg-input));
+  border-bottom: var(--t-add-bw, 1px) solid var(--t-add-border, var(--t-group-border, var(--border-subtle)));
 }
 
 /* ---------- Footer strip ---------- */
@@ -141,12 +141,12 @@
   justify-content: space-between;
   height: var(--t-foot-h, 56px);
   padding: 0 16px;
-  background: var(--t-foot-bg, #0f172a);
+  background: var(--t-foot-bg, var(--bg-input));
   color: var(--text-muted);
   font-size: 13px;
 }
 .footerInside {
-  border-top: 1px solid var(--t-foot-border, #1e3a5f);
+  border-top: 1px solid var(--t-foot-border, var(--border-subtle));
 }
 .footerOutside {
   margin-top: var(--t-foot-gap, 15px);
@@ -175,7 +175,7 @@
   cursor: pointer;
 }
 .rowClickable:focus-visible {
-  outline: 2px solid rgba(0, 236, 252, 0.6);
+  outline: 2px solid color-mix(in srgb, var(--accent) 60%, transparent);
   outline-offset: -2px;
 }
 .sortBtn {
@@ -191,13 +191,13 @@
   cursor: pointer;
 }
 .sortBtn:hover {
-  color: #fff;
+  color: var(--text-primary);
 }
 .th[aria-sort] .sortBtn {
-  color: var(--accent-cyan);
+  color: var(--accent-text);
 }
 .emptyTd {
   padding: 0;
-  background: var(--t-row-a, #0f172a);
+  background: var(--t-row-a, var(--bg-input));
   white-space: normal;
 }

@@ -29,7 +29,7 @@ export function ShareSyncCard({ onClose }: { onClose: () => void }) {
       </div>
       <div className={styles.menu} style={{ paddingTop: 4 }}>
         {items.map((it) => (
-          <div key={it.label} className={it.sepAfter ? styles.menuSep : undefined} style={it.sepAfter ? { borderTop: 0, borderBottom: "1px solid #152d4d" } : undefined}>
+          <div key={it.label} className={it.sepAfter ? styles.menuSep : undefined} style={it.sepAfter ? { borderTop: 0, borderBottom: "1px solid var(--divider-soft)" } : undefined}>
             <button type="button" className={styles.menuItem}>
               <span className={styles.menuIcon}>{it.icon}</span>
               {it.label}

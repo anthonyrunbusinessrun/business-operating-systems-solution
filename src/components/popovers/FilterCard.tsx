@@ -49,9 +49,9 @@ export function FilterCard({ fields, conditions: controlled, onChange }: FilterC
         <Info size={16} className={styles.bannerIcon} aria-hidden />
         <p>
           The following 3 linked record fields are using this view&apos;s filter conditions for record selection:{" "}
-          <span className={styles.bannerStrong}>Team Link</span> (from <span style={{ color: "var(--accent-cyan)", fontWeight: 700 }}>BOSS</span>) ,{" "}
-          <span className={styles.bannerStrong}>Cord</span> (from <span style={{ color: "#3b82c4", fontWeight: 700 }}>Folios</span>) ,{" "}
-          <span className={styles.bannerStrong}>QA</span> (from <span style={{ color: "var(--brand-red)", fontWeight: 700 }}>Actions</span>)
+          <span className={styles.bannerStrong}>Team Link</span> (from <span style={{ color: "var(--accent-text)", fontWeight: 700 }}>BOSS</span>) ,{" "}
+          <span className={styles.bannerStrong}>Cord</span> (from <span style={{ color: "var(--link)", fontWeight: 700 }}>Folios</span>) ,{" "}
+          <span className={styles.bannerStrong}>QA</span> (from <span style={{ color: "var(--primary-text)", fontWeight: 700 }}>Actions</span>)
         </p>
       </div>
       <div className={styles.filterBody}>

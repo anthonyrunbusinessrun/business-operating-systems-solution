@@ -30,7 +30,7 @@
 .brandName {
   font-size: 20px;
   font-weight: 800;
-  color: #fff;
+  color: var(--text-primary);
 }
 .subtitle {
   margin-top: 11px;
@@ -44,7 +44,7 @@
   font-size: 20px;
   line-height: 28px;
   font-weight: 700;
-  color: #fff;
+  color: var(--text-primary);
 }
 .form {
   display: flex;
@@ -58,7 +58,7 @@
   font-size: 13px;
   line-height: 18px;
   font-weight: 700;
-  color: var(--accent-cyan);
+  color: var(--accent-text);
 }
 .forgot:hover {
   text-decoration: underline;
@@ -76,7 +76,7 @@
 .switch a {
   margin-left: 4px;
   font-weight: 700;
-  color: var(--accent-cyan);
+  color: var(--accent-text);
 }
 .switch a:hover {
   text-decoration: underline;

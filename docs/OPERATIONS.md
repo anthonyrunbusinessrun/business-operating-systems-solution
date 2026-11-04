@@ -14,6 +14,11 @@ primary data changes. A prolonged subscriber outage can invalidate its replicati
 The `boss_views_section_idx` and `boss_favorites_table_idx` indexes are additive and idempotent in
 `db/schema.sql`; they must exist on both databases. Do not run startup data migrations on the subscriber.
 
+The theme preference table `boss_user_preferences` (one row per account: the selected theme of the Skin Library) is added by
+`db/schema.sql` with `CREATE TABLE IF NOT EXISTS`. Create it on both databases before enabling the feature in production; DDL does not
+replicate. Without the table the application still works and simply uses the default theme (it reads the missing table as "no choice").
+Saving a theme needs the table on the primary. No environment variable is involved.
+
 The newer AIS accounting UI currently uses browser localStorage (`src/services/ais/repository.ts`). It
 is not PostgreSQL-backed, shared across users, or replicated. Its accounting features were deliberately
 left unchanged during security hardening. Export/reconcile existing browser data before implementing

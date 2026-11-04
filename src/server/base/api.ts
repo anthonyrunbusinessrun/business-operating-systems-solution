@@ -1,3 +1,5 @@
+import { isThemeId, DEFAULT_THEME } from "@/lib/theme/themes";
+import { readUserTheme, writeUserTheme } from "./preferences";
 import type { Pool } from "pg";
 import { ApiError, applyLayout, createField, createRecord, createSection, createView, deleteField, deleteRecords, deleteSection, deleteView, duplicateView, getBundle, getFile, MAX_FILE_BYTES, peekCode, queryTable, renameSection, saveFile, setFavorite, submitForm, updateField, updateRecord, updateView } from "./store";
 
@@ -77,6 +79,19 @@ export async function handleApi(pool: Pool, req: ApiRequest): Promise<ApiRespons
       if (userId) return ok({ userId });
       const fresh = newSessionId();
       return { status: 201, json: { userId: fresh }, setUserId: fresh };
+    }
+
+    // preferences of the signed-in account (the selected theme)
+    if (root === "preferences") {
+      if (!userId) throw new ApiError(401, "Sign in to save your preferences.");
+      if (method === "GET") return ok({ theme: await readUserTheme(pool, userId), default: DEFAULT_THEME });
+      if (method === "PUT") {
+        const body = await readJson(request);
+        if (!isThemeId(body.theme)) throw new ApiError(422, "Choose one of the available themes.", { fieldErrors: { theme: "Unknown theme." } });
+        await writeUserTheme(pool, userId, body.theme);
+        return ok({ theme: body.theme });
+      }
+      throw new ApiError(405, "Method not allowed");
     }
 
     if (root === "files" && method === "POST") {

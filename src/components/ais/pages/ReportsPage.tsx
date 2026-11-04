@@ -184,7 +184,7 @@ export function ReportsPage() {
                 <tbody>
                   {section("Revenue", view.revenue, { label: "Total revenue", amount: view.is.totalRevenue })}
                   {section("Expenses", view.expenses, { label: "Total expenses", amount: view.is.totalExpenses })}
-                  <tr className={styles.grand}><td colSpan={2}>Net income</td><td className={styles.num} style={{ color: view.is.netIncome >= 0 ? "var(--success)" : "#ff4d6a" }}>{money(view.is.netIncome)}</td></tr>
+                  <tr className={styles.grand}><td colSpan={2}>Net income</td><td className={styles.num} style={{ color: view.is.netIncome >= 0 ? "var(--success)" : "var(--danger-text)" }}>{money(view.is.netIncome)}</td></tr>
                 </tbody>
               </table>
             )}

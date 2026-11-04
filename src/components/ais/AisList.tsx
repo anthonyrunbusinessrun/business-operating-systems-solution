@@ -13,7 +13,7 @@ import { downloadCsv, toCsv, type CsvCell } from "@/lib/csv";
 import styles from "./ais.module.css";
 
 /** Table look shared by every AIS list: the Profiles theme of the BOSS views. */
-export const AIS_TABLE_THEME: TableTheme = { headH: 36, rowH: 48, rowA: "#0f172a", rowB: "#0b1220" };
+export const AIS_TABLE_THEME: TableTheme = { headH: 36, rowH: 48, rowA: "var(--bg-input)", rowB: "var(--bg-row-alt)" };
 
 export interface QuickOption {
   value: string;

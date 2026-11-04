@@ -30,16 +30,16 @@
   margin-top: 1px;
 }
 .toastSuccess .toastIcon {
-  color: var(--success);
+  color: var(--success-text);
 }
 .toastError {
-  border-color: rgba(207, 14, 56, 0.6);
+  border-color: color-mix(in srgb, var(--primary) 60%, transparent);
 }
 .toastError .toastIcon {
-  color: #ff4d6a;
+  color: var(--danger-text);
 }
 .toastInfo .toastIcon {
-  color: var(--accent-cyan);
+  color: var(--accent-text);
 }
 .toastBody {
   flex: 1;
@@ -47,12 +47,12 @@
 }
 .toastTitle {
   display: block;
-  color: #fff;
+  color: var(--text-primary);
   font-weight: 600;
 }
 .toastAction {
   margin-left: 8px;
-  color: var(--accent-cyan);
+  color: var(--accent-text);
   font-weight: 600;
 }
 .toastAction:hover {
@@ -68,8 +68,8 @@
   color: var(--text-secondary);
 }
 .toastClose:hover {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-primary);
+  background: var(--bg-hover);
 }
 @keyframes toast-in {
   from {
@@ -88,7 +88,7 @@
   inset: 0;
   z-index: 200;
   display: flex;
-  background: rgba(2, 8, 20, 0.62);
+  background: var(--bg-backdrop);
   animation: fade-in 0.15s ease-out;
 }
 .backdropConfirm {
@@ -144,7 +144,7 @@
   font-size: 15px;
   font-weight: 700;
   line-height: 22px;
-  color: #fff;
+  color: var(--text-primary);
 }
 .dialogSub {
   margin-top: 2px;
@@ -161,8 +161,8 @@
   color: var(--text-secondary);
 }
 .dialogClose:hover {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-primary);
+  background: var(--bg-hover);
 }
 .dialogBody {
   flex: 1;
@@ -244,7 +244,7 @@
 .emptyTitle {
   font-size: 15px;
   font-weight: 700;
-  color: #fff;
+  color: var(--text-primary);
 }
 .emptyText {
   max-width: 420px;
@@ -263,7 +263,7 @@
   display: block;
   height: 10px;
   border-radius: 5px;
-  background: linear-gradient(90deg, #13233f 25%, #1b3254 50%, #13233f 75%);
+  background: linear-gradient(90deg, var(--bg-raised) 25%, var(--bg-raised) 50%, var(--bg-raised) 75%);
   background-size: 200% 100%;
   animation: shimmer 1.3s linear infinite;
 }

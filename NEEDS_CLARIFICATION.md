@@ -157,3 +157,16 @@ It still appears in three places, on purpose:
 - **Database object names**: the tables `airtable_tables` and `airtable_records`, and the columns `airtable_base_id` and `airtable_table_name` of `boss_sections` (in `db/schema.sql`, `scripts/seed-data.ts`, `src/server/mirror.ts`, `src/app/api/health/route.ts`). The production database is replicated to a standby; renaming tables or columns on a replicated primary has to be planned on both databases (DDL does not replicate), so it was not done here. Say if you want that migration prepared.
 - **Data you entered**: the 16 VSF links are real `airtable.com` record URLs (editing the word would break them) and four action titles mention it (for example “Advanced Airtable Training”). Edit them in the app if you want them changed.
 - **Tests that check those links** (they must match the data).
+
+## 15. Skin Library (themes)
+
+- **BOSS White** has "White" as its primary color in the brief; a white button cannot carry white text, so White is a white interface with **ink-black** primary actions and a blue accent. Say if you want another action color.
+- **BOSS Blue** is a light workspace with a **dark blue navbar, tabs and sidebar** ("professional blue with dark blue accents"). The other light themes (Yellow, White, Green) keep a light navbar and sidebar.
+- **BOSS Yellow** is a light, warm-neutral interface: yellow is used for actions, the selected tab and highlights, never as a large background. Where the action color is used as *text* it is darkened until it reaches 4.5 : 1.
+- **BOSS Red** is the existing look. Its muted / dim text colors were lightened slightly (they were below 4.5 : 1 on the dark surfaces); nothing else changed.
+- The default for people who have not chosen a theme is Yellow. Existing users therefore see Yellow, not the old dark red look, until they pick BOSS Red.
+- The theme is per account (not per device); a browser's cookie is only the first-paint hint and the account's choice wins after sign-in.
+- Fixed on purpose: the voucher document is white paper in every theme; the profile-menu BUSINESS / BETA badges and the share-dialog avatar colors are fixed identity colors. The AIS pages (not in the navigation) use the same tokens but their chart series colors were left as they were.
+- The app is laid out at least 960 px wide (existing `min-width`), so on narrower screens the page scrolls sideways as before; the theme menu is pinned to the screen there.
+- Database: one new additive table, `boss_user_preferences`; apply it to the standby as well (see `docs/OPERATIONS.md`). No environment variables.
+- `docs/DESIGN_NOTES.md` describes the original sampled colors; they now live in the BOSS Red theme.

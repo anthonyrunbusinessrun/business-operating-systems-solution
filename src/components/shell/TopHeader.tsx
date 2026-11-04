@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { Popover } from "@/components/popovers/Popover";
 import { PROFILE_MENU_WIDTH, ProfileMenu } from "@/components/popovers/ProfileMenu";
+import { ThemeSelector } from "@/components/theme/ThemeSelector";
 import { useGlobalSearch } from "./SearchContext";
 import styles from "./shell.module.css";
 
@@ -13,7 +14,7 @@ export function TopHeader({ email }: { email?: string }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const { query, setQuery } = useGlobalSearch();
   return (
-    <header className={styles.header}>
+    <header className={`${styles.header} boss-chrome`}>
       <div className={styles.brand}>
         <Image src="/brand/boss-logo.png" alt="BOSS" width={28} height={28} className={styles.logo} priority />
         <span className={styles.product}>Business Operating Systems Solutions</span>
@@ -38,6 +39,7 @@ export function TopHeader({ email }: { email?: string }) {
             </button>
           )}
         </label>
+        <ThemeSelector />
         <div className={styles.user}>
           <div className={styles.userText}>
             <p className={styles.userName}>{email?.split('@')[0] ?? 'BOSS'}</p>

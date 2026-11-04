@@ -92,10 +92,10 @@ export function GanttView({ rows, onOpen, onCreate, onAddField }: ViewProps) {
               {tasks.map(({ row, bar }, i) => <span key={row.id} className={s.ganttStripe} style={{ top: i * ROW, height: ROW }} aria-hidden />)}
               <svg className={s.arrows} width={width} height={height} aria-hidden>
                 <defs>
-                  <marker id="arrow-ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#7be9f5" /></marker>
-                  <marker id="arrow-late" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#ff8ea3" /></marker>
+                  <marker id="arrow-ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L8,4 L0,8 z" style={{ fill: "var(--tone-cyan-fg)" }} /></marker>
+                  <marker id="arrow-late" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L8,4 L0,8 z" style={{ fill: "var(--danger-text)" }} /></marker>
                 </defs>
-                {arrows.map((a) => <path key={a.id} d={a.d} fill="none" stroke={a.late ? "#ff8ea3" : "#7be9f5"} strokeWidth="1.5" markerEnd={`url(#arrow-${a.late ? "late" : "ok"})`} />)}
+                {arrows.map((a) => <path key={a.id} d={a.d} fill="none" style={{ stroke: a.late ? "var(--danger-text)" : "var(--tone-cyan-fg)" }} strokeWidth="1.5" markerEnd={`url(#arrow-${a.late ? "late" : "ok"})`} />)}
               </svg>
               {tasks.map(({ row, bar }, i) => <DraggableBar key={row.id} bar={bar} from={from} zoom={zoom} label={title(row)} color={color(row)} top={i * ROW + 7} canResize={!!t.config.endField} onOpen={() => onOpen(row.id)} title={`${title(row)} · ${durationDays(bar)} day${durationDays(bar) === 1 ? "" : "s"}`} />)}
             </div>

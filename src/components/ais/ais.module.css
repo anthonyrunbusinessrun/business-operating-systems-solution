@@ -20,7 +20,7 @@
   font-size: 20px;
   font-weight: 700;
   line-height: 24px;
-  color: #fff;
+  color: var(--text-primary);
   white-space: nowrap;
 }
 .subtitle {
@@ -70,14 +70,14 @@
   transition: background-color 0.12s, border-color 0.12s;
 }
 .chip:hover {
-  background: #14213a;
-  color: #fff;
+  background: var(--bg-raised);
+  color: var(--text-primary);
 }
 .chipActive,
 .chipActive:hover {
-  background: var(--accent-cyan-bg);
-  color: var(--accent-cyan);
-  border-color: rgba(0, 236, 252, 0.4);
+  background: var(--accent-bg);
+  color: var(--accent-text);
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
   font-weight: 600;
 }
 .chipSelect {
@@ -104,11 +104,11 @@
   outline: none;
 }
 .chipSelect select option {
-  background: #0f172a;
-  color: #fff;
+  background: var(--bg-input);
+  color: var(--text-primary);
 }
 .chipSelect:focus-within {
-  border-color: var(--accent-cyan);
+  border-color: var(--accent);
 }
 .chipSelect svg {
   position: absolute;
@@ -154,20 +154,20 @@
   transition: background-color 0.12s, color 0.12s, border-color 0.12s;
 }
 .quickBtn:hover {
-  color: #fff;
-  background: #14213a;
+  color: var(--text-primary);
+  background: var(--bg-raised);
 }
 .quickOn,
 .quickOn:hover {
-  color: #fff;
-  background: var(--brand-red);
-  border-color: var(--brand-red);
+  color: var(--text-on-primary);
+  background: var(--primary);
+  border-color: var(--primary);
 }
 .quickCount {
   min-width: 18px;
   padding: 1px 6px;
   border-radius: var(--radius-pill);
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--bg-hover-strong);
   font-size: 11px;
   text-align: center;
 }
@@ -198,7 +198,7 @@
   margin-top: 4px;
   font-size: 18px;
   font-weight: 700;
-  color: #fff;
+  color: var(--text-primary);
   font-variant-numeric: tabular-nums;
 }
 .cardNote {
@@ -212,20 +212,20 @@
   transition: border-color 0.12s, background-color 0.12s;
 }
 .cardButton:hover {
-  border-color: #2b4f7d;
-  background: #0d2444;
+  border-color: var(--border-strong);
+  background: var(--bg-raised);
 }
 .cardOn {
-  border-color: var(--accent-cyan);
+  border-color: var(--accent);
 }
 .danger {
-  color: #ff4d6a;
+  color: var(--danger-text);
 }
 .good {
-  color: var(--success);
+  color: var(--success-text);
 }
 .warn {
-  color: #f5b800;
+  color: var(--warning-text);
 }
 
 /* ---------- Cell helpers ---------- */
@@ -236,11 +236,11 @@
   color: var(--text-muted);
 }
 .link {
-  color: var(--accent-cyan);
+  color: var(--accent-text);
   font-weight: 600;
 }
 .strong {
-  color: #fff;
+  color: var(--text-primary);
   font-weight: 600;
 }
 .dim {
@@ -255,8 +255,8 @@
   height: 20px;
   padding: 0 7px;
   border-radius: var(--radius-sm);
-  background: #0e2f4a;
-  color: var(--accent-cyan);
+  background: var(--accent-bg);
+  color: var(--accent-text);
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.04em;
@@ -299,14 +299,14 @@
 }
 .miniTable td {
   padding: 9px 10px;
-  border-bottom: 1px solid #14233d;
+  border-bottom: 1px solid var(--divider-soft);
   color: var(--text-body);
   vertical-align: top;
 }
 .miniTable tfoot td {
   border-bottom: 0;
   font-weight: 700;
-  color: #fff;
+  color: var(--text-primary);
 }
 .miniTable .num {
   text-align: right;
@@ -319,7 +319,7 @@
   border-radius: var(--radius-md);
 }
 .linkBtn {
-  color: var(--accent-cyan);
+  color: var(--accent-text);
   font-weight: 600;
   text-align: left;
 }
@@ -356,10 +356,10 @@
   color: var(--text-secondary);
 }
 .lineRow + .lineRow {
-  border-top: 1px solid #14233d;
+  border-top: 1px solid var(--divider-soft);
 }
 .lineRowBad {
-  background: rgba(207, 14, 56, 0.06);
+  background: color-mix(in srgb, var(--primary) 6%, transparent);
 }
 .journalCols {
   grid-template-columns: 28px minmax(180px, 1.4fr) minmax(140px, 1fr) 120px 120px 32px;
@@ -383,7 +383,7 @@
   padding-top: 9px;
   text-align: right;
   font-variant-numeric: tabular-nums;
-  color: #fff;
+  color: var(--text-primary);
 }
 .lineRemove {
   display: inline-grid;
@@ -394,8 +394,8 @@
   color: var(--text-secondary);
 }
 .lineRemove:hover:not(:disabled) {
-  color: #ff4d6a;
-  background: rgba(255, 255, 255, 0.05);
+  color: var(--danger-text);
+  background: var(--bg-faint);
 }
 .lineRemove:disabled {
   opacity: 0.35;
@@ -406,7 +406,7 @@
   align-items: center;
   gap: 8px;
   margin-top: 10px;
-  color: var(--accent-cyan);
+  color: var(--accent-text);
   font-size: 13px;
   font-weight: 600;
 }
@@ -433,14 +433,14 @@
   border-top: 1px solid var(--border-subtle);
   font-size: 15px;
   font-weight: 700;
-  color: #fff;
+  color: var(--text-primary);
 }
 .totalBad {
-  color: #ff6b84;
+  color: var(--danger-text);
   font-weight: 700;
 }
 .totalGood {
-  color: var(--success);
+  color: var(--success-text);
   font-weight: 700;
 }
 .fieldRow {
@@ -474,12 +474,12 @@
   font-weight: 600;
 }
 .reportTab:hover {
-  color: #fff;
+  color: var(--text-primary);
 }
 .reportTabOn,
 .reportTabOn:hover {
-  background: var(--brand-red);
-  color: #fff;
+  background: var(--primary);
+  color: var(--text-on-primary);
 }
 .reportBar {
   display: flex;
@@ -500,14 +500,14 @@
   color: var(--text-secondary);
 }
 .searchBox:focus-within {
-  border-color: var(--accent-cyan);
+  border-color: var(--accent);
 }
 .searchBox input {
   width: 170px;
   background: transparent;
   border: 0;
   outline: none;
-  color: #fff;
+  color: var(--text-primary);
   font-size: 12px;
 }
 .report {
@@ -524,7 +524,7 @@
 .reportTitle {
   font-size: 17px;
   font-weight: 700;
-  color: #fff;
+  color: var(--text-primary);
 }
 .reportSub {
   margin-top: 4px;
@@ -564,7 +564,7 @@
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--accent-cyan);
+  color: var(--accent-text);
 }
 .stmt .sub td {
   padding-top: 12px;
@@ -572,7 +572,7 @@
   color: var(--text-secondary);
 }
 .stmt .line td {
-  border-top: 1px solid #14233d;
+  border-top: 1px solid var(--divider-soft);
   color: var(--text-cell);
 }
 .stmt .line td:first-child {
@@ -581,13 +581,13 @@
 .stmt .total td {
   border-top: 1px solid var(--border-subtle);
   font-weight: 700;
-  color: #fff;
+  color: var(--text-primary);
 }
 .stmt .grand td {
   border-top: 2px solid var(--border-subtle);
   font-size: 14.5px;
   font-weight: 700;
-  color: #fff;
+  color: var(--text-primary);
   background: var(--bg-input);
 }
 .reportScroll {
@@ -616,7 +616,7 @@
   margin: 0 0 4px;
   font-size: 15px;
   font-weight: 700;
-  color: #fff;
+  color: var(--text-primary);
 }
 .settingsDesc {
   margin: 0 0 16px;

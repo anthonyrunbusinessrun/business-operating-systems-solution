@@ -46,6 +46,7 @@ export function Popover({ open, onClose, width, align = "left", label, trigger, 
         <div
           role="dialog"
           aria-label={label}
+          data-boss-surface
           className={cn(styles.panel, align === "left" ? styles.alignLeft : styles.alignRight)}
           style={{ width, ...panelStyle }}
         >

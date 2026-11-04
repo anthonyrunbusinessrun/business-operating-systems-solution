@@ -33,7 +33,7 @@ export function GroupByCard({ onCollapseAll, onExpandAll }: { onCollapseAll: () 
         <div className={styles.groupRow}>
           <span className={`${styles.select} ${styles.selectGrow}`}>
             <span style={{ display: "inline-flex", alignItems: "center", gap: 10 }}>
-              <SquareCheck size={18} color="var(--accent-cyan)" aria-hidden /> Team
+              <SquareCheck size={18} color="var(--accent-text)" aria-hidden /> Team
             </span>
             <ChevronDown size={16} aria-hidden />
           </span>
@@ -41,7 +41,7 @@ export function GroupByCard({ onCollapseAll, onExpandAll }: { onCollapseAll: () 
             <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
               <Square size={16} aria-hidden />
               <ArrowRight size={14} aria-hidden />
-              <SquareCheck size={16} color="var(--accent-cyan)" aria-hidden />
+              <SquareCheck size={16} color="var(--accent-text)" aria-hidden />
             </span>
             <ChevronDown size={16} aria-hidden />
           </span>

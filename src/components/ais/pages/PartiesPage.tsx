@@ -56,7 +56,7 @@ export function PartiesPage({ party }: { party: "customer" | "vendor" }) {
   const columns: Column<PartyRow>[] = [
     { key: "code", header: "Code", width: 90, render: (r) => <span className={styles.link}>{r.code}</span> },
     { key: "name", header: isCustomer ? "Customer" : "Vendor", width: 250, padLeft: 0, render: (r) => <span className={styles.strong}>{r.name}</span> },
-    { key: "email", header: "Email", width: 290, padLeft: 0, render: (r) => <span style={{ color: "var(--accent-cyan)" }}>{r.email || "–"}</span> },
+    { key: "email", header: "Email", width: 290, padLeft: 0, render: (r) => <span style={{ color: "var(--accent-text)" }}>{r.email || "–"}</span> },
     { key: "terms", header: "Terms", width: 108, padLeft: 0, render: (r) => <span className={styles.dim}>{r.terms}</span> },
     { key: "openBalance", header: isCustomer ? "Open balance" : "Amount owed", width: 120, align: "right", render: (r) => <Money cents={r.openBalance} dashZero /> },
     { key: "status", header: "Status", width: 100, padLeft: 16, render: (r) => <PartyStatusBadge status={r.status} /> },

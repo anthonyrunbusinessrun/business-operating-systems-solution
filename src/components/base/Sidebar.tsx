@@ -202,7 +202,7 @@ export function Sidebar({ onOpenRecord }: { onOpenRecord: (id: string) => void }
   const renaming = modal?.type === "rename" ? (modal.kind === "view" ? t.views.find((v) => v.id === modal.id) : t.sections.find((x) => x.id === modal.id)) : undefined;
 
   return (
-    <aside className={s.sidebar} aria-label="Views">
+    <aside className={`${s.sidebar} boss-chrome`} aria-label="Views">
       <CreateMenu
         onPick={(kind) => {
           if (kind === "section") setModal({ type: "createSection" });

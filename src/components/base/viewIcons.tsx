@@ -2,14 +2,14 @@ import { CalendarDays, ClipboardList, GanttChart, LayoutGrid, ListChecks, Square
 import type { ViewType } from "@/lib/base/types";
 
 export const VIEW_COLOR: Record<ViewType, string> = {
-  grid: "#5aa2ff",
-  calendar: "#ff8a5c",
-  gallery: "#a78bfa",
-  kanban: "#4ade80",
-  timeline: "#ff6b8b",
-  list: "#7aa2ff",
-  gantt: "#2dd4bf",
-  form: "#f472b6",
+  grid: "var(--tone-blue-fg)",
+  calendar: "var(--tone-orange-fg)",
+  gallery: "var(--tone-purple-fg)",
+  kanban: "var(--tone-green-fg)",
+  timeline: "var(--tone-red-fg)",
+  list: "var(--tone-blue-fg)",
+  gantt: "var(--tone-cyan-fg)",
+  form: "var(--tone-pink-fg)",
 };
 
 export function ViewIcon({ type, size = 16 }: { type: ViewType | "section"; size?: number }) {

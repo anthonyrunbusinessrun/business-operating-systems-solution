@@ -11,7 +11,7 @@ import { AisPage, AisPageLoading } from "../AisPage";
 import { ChipSelect } from "../AisList";
 import { useAis } from "../AisProvider";
 
-const TONE = { danger: "#ff4d6a", warn: "#f5b800", ok: "#34d249" } as const;
+const TONE = { danger: "var(--danger-text)", warn: "var(--warning)", ok: "var(--success-text)" } as const;
 
 /** "↑ 12.4%" with green for good news and red for bad news (`upIsGood` flips for expenses). */
 function DeltaText({ delta, upIsGood }: { delta: Delta; upIsGood: boolean }) {
@@ -63,7 +63,7 @@ export function DashboardPage() {
             </div>
             <div className={styles.kpi}>
               <div className={styles.kpiLabel}>Net income</div>
-              <div className={styles.kpiValue} style={{ color: m.netIncome >= 0 ? "var(--success)" : "#ff4d6a" }}>{formatMoneyWhole(m.netIncome)}</div>
+              <div className={styles.kpiValue} style={{ color: m.netIncome >= 0 ? "var(--success)" : "var(--danger-text)" }}>{formatMoneyWhole(m.netIncome)}</div>
               <div className={styles.kpiNote}><DeltaText delta={m.deltas.netIncome} upIsGood /> {m.deltas.netIncome.previous !== null && <>vs prior period ({formatMoneyCompact(m.deltas.netIncome.previous)})</>}</div>
             </div>
             <div className={styles.kpi}>
@@ -95,8 +95,8 @@ export function DashboardPage() {
                 <p className={styles.panelSub}>Last 6 months · posted entries · all accounts</p>
               </div>
               <div className={styles.legend}>
-                <span><span className={styles.dot} style={{ background: "#2fc43f" }} />Revenue</span>
-                <span><span className={styles.dot} style={{ background: "#d9112f" }} />Expenses</span>
+                <span><span className={styles.dot} style={{ background: "var(--success-text)" }} />Revenue</span>
+                <span><span className={styles.dot} style={{ background: "var(--danger)" }} />Expenses</span>
               </div>
             </div>
             <div className={styles.chart} role="img" aria-label={`Monthly revenue and expenses. ${series.map((s) => `${s.label}: revenue ${formatMoneyCompact(s.revenue)}, expenses ${formatMoneyCompact(s.expenses)}`).join("; ")}.`}>
@@ -129,9 +129,9 @@ export function DashboardPage() {
               <p className={ais.stickyNote} style={{ marginTop: 16 }}>No cash moved in this period.</p>
             ) : (
               <div className={styles.flowRows}>
-                <div className={styles.flow}><span>Cash in</span><div className={styles.track}><div className={styles.fill} style={{ width: `${(flow.cashIn / flowMax) * 100}%`, background: "#2fc43f" }} /></div><span className={styles.flowAmount}>{formatMoney(flow.cashIn)}</span></div>
-                <div className={styles.flow}><span>Cash out</span><div className={styles.track}><div className={styles.fill} style={{ width: `${(flow.cashOut / flowMax) * 100}%`, background: "#d9112f" }} /></div><span className={styles.flowAmount}>{formatMoney(flow.cashOut)}</span></div>
-                <div className={styles.flow}><span>Net cash flow</span><div className={styles.track}><div className={styles.fill} style={{ width: `${(Math.abs(flow.net) / flowMax) * 100}%`, background: "#e0b000" }} /></div><span className={styles.flowAmount} style={{ color: flow.net >= 0 ? "var(--success)" : "#ff4d6a" }}>{flow.net >= 0 ? "+" : "-"}{formatMoney(Math.abs(flow.net))}</span></div>
+                <div className={styles.flow}><span>Cash in</span><div className={styles.track}><div className={styles.fill} style={{ width: `${(flow.cashIn / flowMax) * 100}%`, background: "var(--success-text)" }} /></div><span className={styles.flowAmount}>{formatMoney(flow.cashIn)}</span></div>
+                <div className={styles.flow}><span>Cash out</span><div className={styles.track}><div className={styles.fill} style={{ width: `${(flow.cashOut / flowMax) * 100}%`, background: "var(--danger)" }} /></div><span className={styles.flowAmount}>{formatMoney(flow.cashOut)}</span></div>
+                <div className={styles.flow}><span>Net cash flow</span><div className={styles.track}><div className={styles.fill} style={{ width: `${(Math.abs(flow.net) / flowMax) * 100}%`, background: "var(--warning)" }} /></div><span className={styles.flowAmount} style={{ color: flow.net >= 0 ? "var(--success)" : "var(--danger-text)" }}>{flow.net >= 0 ? "+" : "-"}{formatMoney(Math.abs(flow.net))}</span></div>
               </div>
             )}
           </section>
@@ -162,8 +162,8 @@ export function DashboardPage() {
             <h2 id="fh" className={styles.panelTitle}>Financial Health</h2>
             <div className={styles.health}>
               <div className={styles.tile}><div className={styles.tileLabel}>Profit margin</div><div className={styles.tileValue}>{pct(m.profitMargin)}</div><div className={styles.tileNote}>of total revenue</div></div>
-              <div className={styles.tile}><div className={styles.tileLabel}>Revenue growth</div><div className={styles.tileValue} style={{ color: m.revenueGrowth === null ? undefined : m.revenueGrowth >= 0 ? "var(--success)" : "#ff4d6a" }}>{pct(m.revenueGrowth, true)}</div><div className={styles.tileNote}>vs prior period</div></div>
-              <div className={styles.tile}><div className={styles.tileLabel}>Expense growth</div><div className={styles.tileValue} style={{ color: m.expenseGrowth === null ? undefined : m.expenseGrowth > 0 ? "#f5b800" : "var(--success)" }}>{pct(m.expenseGrowth, true)}</div><div className={styles.tileNote}>vs prior period</div></div>
+              <div className={styles.tile}><div className={styles.tileLabel}>Revenue growth</div><div className={styles.tileValue} style={{ color: m.revenueGrowth === null ? undefined : m.revenueGrowth >= 0 ? "var(--success)" : "var(--danger-text)" }}>{pct(m.revenueGrowth, true)}</div><div className={styles.tileNote}>vs prior period</div></div>
+              <div className={styles.tile}><div className={styles.tileLabel}>Expense growth</div><div className={styles.tileValue} style={{ color: m.expenseGrowth === null ? undefined : m.expenseGrowth > 0 ? "var(--warning)" : "var(--success-text)" }}>{pct(m.expenseGrowth, true)}</div><div className={styles.tileNote}>vs prior period</div></div>
               <div className={styles.tile}><div className={styles.tileLabel}>Avg days to collect</div><div className={styles.tileValue}>{m.avgDaysToCollect === null ? "–" : Math.round(m.avgDaysToCollect)}</div><div className={styles.tileNote}>on paid invoices</div></div>
               <div className={styles.tile}><div className={styles.tileLabel}>Cash runway</div><div className={styles.tileValue}>{m.cashRunwayMonths === null ? "–" : `${m.cashRunwayMonths.toFixed(1)} mo`}</div><div className={styles.tileNote}>at current expenses</div></div>
               <div className={styles.tile}><div className={styles.tileLabel}>Collection rate</div><div className={styles.tileValue} style={{ color: m.collectionRate !== null && m.collectionRate >= 90 ? "var(--success)" : undefined }}>{m.collectionRate === null ? "–" : `${Math.round(m.collectionRate)}%`}</div><div className={styles.tileNote}>of due invoices paid</div></div>

@@ -44,7 +44,7 @@ function useNarrow(query = "(max-width: 640px)") {
 }
 
 function TileButton({ tile, onPick, refCb }: { tile: Tile; onPick: (k: CreateKind) => void; refCb: (el: HTMLButtonElement | null) => void }) {
-  const color = tile.kind === "section" ? "#94a3b8" : VIEW_COLOR[tile.kind];
+  const color = tile.kind === "section" ? "var(--tone-gray-fg)" : VIEW_COLOR[tile.kind];
   return (
     <button ref={refCb} type="button" role="menuitem" aria-label={tile.label} className={s.tile} style={{ "--tile": color } as React.CSSProperties} onClick={() => onPick(tile.kind)}>
       <span className={s.tileIcon} aria-hidden>

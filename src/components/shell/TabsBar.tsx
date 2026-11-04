@@ -34,7 +34,7 @@ export function TabsBar() {
   ];
 
   return (
-    <nav ref={nav} className={styles.tabs} aria-label="Primary">
+    <nav ref={nav} className={`${styles.tabs} boss-chrome`} aria-label="Primary">
       {tabs.map((t) => (
         <Link
           key={t.key}
