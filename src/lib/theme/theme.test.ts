@@ -1,17 +1,55 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { contrast, luminance, parseHex } from "./color";
+import fs from "node:fs";
+import path from "node:path";
+import { contrast, hsl, luminance, parseHex } from "./color";
 import { DEFAULT_THEME, THEMES, THEME_IDS, TONE_NAMES, getTheme, isThemeId, readableSurfaces, themeCss } from "./themes";
 
 const TEXT = [["text-primary", 7], ["text-cell", 7], ["text-body", 7], ["text-secondary", 4.5], ["text-dim", 4.5], ["text-muted", 4.5], ["icon-inline", 4.5], ["link", 4.5]] as const;
 
 describe("skin library", () => {
-  it("has the eight themes, Yellow first and default, then White, Purple, Red", () => {
+  it("has the eight themes, Golden Hour first and default", () => {
+    // the ids are stable storage keys (account preference and cookie); only the names are shown to people
     assert.deepEqual([...THEME_IDS], ["yellow", "white", "purple", "red", "blue", "green", "orange", "midnight"]);
     assert.equal(DEFAULT_THEME, "yellow");
-    assert.deepEqual(THEMES.map((t) => t.name), ["BOSS Yellow", "BOSS White", "BOSS Purple", "BOSS Red", "BOSS Blue", "BOSS Green", "BOSS Orange", "BOSS Midnight"]);
+    assert.deepEqual(THEMES.map((t) => t.name), ["Golden Hour", "Porcelain", "Amethyst", "Crimson", "Sapphire", "Evergreen", "Ember", "Midnight"]);
+    assert.equal(getTheme(DEFAULT_THEME).name, "Golden Hour");
     assert.equal(THEMES.length, 8);
     assert.equal(new Set(THEMES.map((t) => t.id)).size, 8);
+    assert.equal(new Set(THEMES.map((t) => t.name)).size, 8);
+  });
+
+  it("each theme has its short description (the palette in words)", () => {
+    assert.deepEqual(THEMES.map((t) => t.description), [
+      "Warm yellow, soft cream, and deep navy accents.",
+      "Clean white, soft gray, and ink-black accents.",
+      "Deep violet, lavender, and balanced neutral tones.",
+      "Bold red, deep burgundy, and subtle dark accents.",
+      "Rich blue, cool white, and deep navy accents.",
+      "Natural green, muted sage, and neutral backgrounds.",
+      "Warm orange, amber, and charcoal accents.",
+      "Deep navy, electric blue, and subtle cyan accents.",
+    ]);
+  });
+
+  it("the old generic names are gone from the source, tests and docs", () => {
+    const root = process.cwd();
+    const old = /BOSS (Yellow|White|Purple|Red|Blue|Green|Orange|Midnight)\b/;
+    const skip = new Set(["node_modules", ".next", ".git", "__pycache__"]);
+    const hits: string[] = [];
+    const walk = (dir: string) => {
+      for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+        if (skip.has(e.name)) continue;
+        const f = path.join(dir, e.name);
+        if (e.isDirectory()) walk(f);
+        else if (/\.(ts|tsx|css|md|py|json|sql|mjs)$/.test(e.name) && e.name !== "package-lock.json" && !f.endsWith("theme.test.ts") && !f.endsWith("CHANGES.md")) {
+          if (old.test(fs.readFileSync(f, "utf8"))) hits.push(path.relative(root, f));
+        }
+      }
+    };
+    for (const d of ["src", "qa", "docs", "scripts"]) walk(path.join(root, d));
+    for (const f of ["README.md", "NEEDS_CLARIFICATION.md"]) if (old.test(fs.readFileSync(path.join(root, f), "utf8"))) hits.push(f);
+    assert.deepEqual(hits, [], "still mentions the old names");
   });
 
   it("every theme defines the same complete set of tokens", () => {
@@ -75,6 +113,8 @@ describe("accessibility: every theme meets WCAG AA", () => {
 });
 
 describe("design direction", () => {
+  /** How colorful a color is, 0 (gray) to 1: the spread of its channels. HSL saturation exaggerates near-white tints. */
+  const chroma = (hex: string) => { const c = parseHex(hex); return (Math.max(...c) - Math.min(...c)) / 255; };
   const warm = (hex: string) => {
     const [r, g, b] = parseHex(hex);
     return Math.max(r, g, b) - Math.min(r, g, b);
@@ -90,37 +130,66 @@ describe("design direction", () => {
     assert.deepEqual(THEMES.filter((t) => t.scheme === "light").map((t) => t.id), ["yellow", "white", "blue", "green"]);
   });
 
-  it("Yellow stays professional: neutral warm backgrounds, yellow only as the accent, dark text on it", () => {
+  it("Golden Hour stays professional: soft cream backgrounds, yellow only for actions, deep navy accents and text", () => {
     const y = getTheme("yellow").tokens;
     for (const k of ["bg-page", "bg-app", "bg-surface", "bg-sidebar", "bg-navbar", "bg-input"]) assert.ok(warm(y[k]) <= 24, `${k} ${y[k]} is a near-neutral warm tone`);
     assert.ok(luminance(y["bg-app"]) > 0.9, "a light page");
     assert.ok(contrast(y["text-on-primary"], y["primary"]) >= 9, "dark text on the yellow button");
     assert.ok(luminance(y["text-on-primary"]) < 0.1);
     assert.ok(contrast(y["primary-text"], y["bg-surface"]) >= 4.5, "yellow used as text is darkened until readable");
+    const navy = (hex: string) => { const c = hsl(hex); return c.h >= 205 && c.h <= 235 && c.l < 0.3; };
+    for (const k of ["accent", "solid", "text-primary", "text-body", "text-on-primary"]) assert.ok(navy(y[k]), `${k} ${y[k]} is a deep navy`);
+    const cream = hsl(y["bg-app"]); assert.ok(cream.h >= 38 && cream.h <= 55 && cream.l > 0.95, "a soft cream page");
+    const gold = hsl(y["primary"]); assert.ok(gold.h >= 40 && gold.h <= 50 && gold.s > 0.9, "warm yellow actions");
   });
 
-  it("White uses dark ink for actions and Blue frames a light page with a dark blue navbar, tabs and sidebar", () => {
+  it("Porcelain is white and soft gray with ink-black accents; Sapphire frames a cool white page with a dark navy navbar, tabs and sidebar", () => {
     const w = getTheme("white").tokens;
     assert.ok(luminance(w["primary"]) < 0.05, "ink-black primary");
+    assert.ok(luminance(w["accent"]) < 0.05 && chroma(w["accent"]) < 0.12, "ink accent, not a color");
+    assert.ok(luminance(w["solid"]) < 0.05, "ink bars and chips");
     assert.equal(w["bg-surface"], "#ffffff");
+    for (const k of ["bg-page", "bg-sidebar", "bg-inset", "bg-selected"]) assert.ok(chroma(w[k]) <= 0.06 && hsl(w[k]).l > 0.9 && hsl(w[k]).l < 0.99, `${k} ${w[k]} is a soft gray`);
     const b = getTheme("blue");
+    assert.ok(hsl(b.tokens["primary"]).h >= 215 && hsl(b.tokens["primary"]).h <= 235 && hsl(b.tokens["primary"]).s > 0.7, "a rich blue");
+    assert.ok(hsl(b.tokens["accent"]).h >= 215 && hsl(b.tokens["accent"]).h <= 235 && hsl(b.tokens["accent"]).l < 0.3, "a deep navy accent");
+    assert.ok(hsl(b.tokens["bg-app"]).h >= 205 && hsl(b.tokens["bg-app"]).h <= 225 && hsl(b.tokens["bg-app"]).l > 0.95, "a cool white page");
     for (const k of ["bg-navbar", "bg-tabs", "bg-sidebar"]) assert.ok(luminance(b.tokens[k]) < 0.1, `${k} is dark blue`);
     assert.ok(luminance(b.tokens["bg-app"]) > 0.9);
     assert.ok(b.chrome && b.chrome["color-scheme"] === "dark");
   });
 
-  it("BOSS Red keeps the original brand colors", () => {
+  it("Crimson is bold brand red on deep burgundy with subtle dark accents", () => {
     const r = getTheme("red").tokens;
-    assert.equal(r["primary"], "#cf0e38");
-    assert.equal(r["primary-hover"], "#dc2040");
-    assert.equal(r["accent"], "#00ecfc");
-    assert.equal(r["bg-page"], "#050a1a");
-    assert.equal(r["bg-app"], "#051424");
-    assert.equal(r["bg-surface"], "#0b1f3a");
-    assert.equal(r["bg-input"], "#0f172a");
-    assert.equal(r["border-subtle"], "#1e3a5f");
-    assert.equal(r["text-body"], "#e2e8f0");
-    assert.equal(r["tone-green-fg"], "#74e0a5");
+    assert.equal(r["primary"], "#cf0e38", "the BOSS brand red is kept");
+    assert.ok(hsl(r["primary"]).h >= 345 || hsl(r["primary"]).h <= 5);
+    for (const k of ["bg-page", "bg-app", "bg-surface", "bg-sidebar", "bg-navbar", "bg-input", "bg-inset"]) {
+      const c = hsl(r[k]);
+      assert.ok(c.h >= 335 && c.h <= 355 && c.l < 0.16, `${k} ${r[k]} is deep burgundy`);
+    }
+    const accent = hsl(r["accent"]); assert.ok(accent.s < 0.6 && accent.h >= 330 && accent.h <= 360, "a muted rose accent, not a bright color");
+    assert.ok(luminance(r["solid"]) < 0.1 && hsl(r["solid"]).h >= 335, "burgundy bars and chips");
+  });
+
+  it("Amethyst is violet and lavender; Evergreen green with sage and neutral backgrounds; Ember orange and amber on charcoal; Midnight navy, electric blue and a soft cyan", () => {
+    const hue = (hex: string) => hsl(hex).h;
+    const a = getTheme("purple").tokens;
+    assert.ok(hue(a["primary"]) >= 255 && hue(a["primary"]) <= 275, "violet");
+    assert.ok(hue(a["accent"]) >= 265 && hue(a["accent"]) <= 285 && hsl(a["accent"]).l > 0.75, "lavender");
+    assert.ok(hue(a["bg-app"]) >= 255 && hue(a["bg-app"]) <= 280 && hsl(a["bg-app"]).l < 0.12, "deep violet-black page");
+    const g = getTheme("green").tokens;
+    assert.ok(hue(g["primary"]) >= 130 && hue(g["primary"]) <= 150, "natural green");
+    for (const k of ["bg-sidebar", "bg-tabs", "bg-selected", "bg-inset"]) assert.ok(hue(g[k]) >= 90 && hue(g[k]) <= 130 && chroma(g[k]) <= 0.14, `${k} ${g[k]} is a muted sage`);
+    assert.ok(chroma(g["bg-app"]) <= 0.04 && hsl(g["bg-app"]).l > 0.94, "a neutral page");
+    assert.ok(hue(g["accent"]) >= 120 && hue(g["accent"]) <= 150 && chroma(g["accent"]) <= 0.2, "a sage accent");
+    const e = getTheme("orange").tokens;
+    assert.ok(hue(e["primary"]) >= 20 && hue(e["primary"]) <= 30, "orange");
+    assert.ok(hue(e["accent"]) >= 38 && hue(e["accent"]) <= 48, "amber");
+    for (const k of ["bg-page", "bg-app", "bg-surface", "bg-sidebar"]) assert.ok(chroma(e[k]) <= 0.04 && hsl(e[k]).l < 0.14, `${k} ${e[k]} is charcoal`);
+    const m = getTheme("midnight").tokens;
+    assert.ok(hue(m["bg-app"]) >= 220 && hue(m["bg-app"]) <= 240 && hsl(m["bg-app"]).l < 0.1, "deep navy");
+    assert.ok(hue(m["primary"]) >= 220 && hue(m["primary"]) <= 235 && hsl(m["primary"]).s > 0.85, "electric blue");
+    assert.ok(hue(m["accent"]) >= 185 && hue(m["accent"]) <= 195 && hsl(m["accent"]).s < 0.7, "a subtle cyan (not neon)");
   });
 });
 

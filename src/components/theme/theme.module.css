@@ -81,11 +81,14 @@
   color: var(--text-primary);
 }
 .optionDesc {
+  margin-top: 1px;
   font-size: 11.5px;
   color: var(--text-secondary);
+  /* the palette in words: up to two lines, never a half-cut sentence on one */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 .check {
   display: grid;

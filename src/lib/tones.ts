@@ -2,7 +2,7 @@ import type { CSSProperties } from "react";
 
 /**
  * Badge / pill / tag palette. Every color is a theme token (`--tone-*`, `--primary`, `--danger-*`), so the same badge is
- * readable in all skins; the original dark-theme values live in the BOSS Red theme (src/lib/theme/themes.ts).
+ * readable in all skins; the theme values live in src/lib/theme/themes.ts.
  */
 export interface Tone {
   bg: string;

@@ -160,13 +160,19 @@ It still appears in three places, on purpose:
 
 ## 15. Skin Library (themes)
 
-- **BOSS White** has "White" as its primary color in the brief; a white button cannot carry white text, so White is a white interface with **ink-black** primary actions and a blue accent. Say if you want another action color.
-- **BOSS Blue** is a light workspace with a **dark blue navbar, tabs and sidebar** ("professional blue with dark blue accents"). The other light themes (Yellow, White, Green) keep a light navbar and sidebar.
-- **BOSS Yellow** is a light, warm-neutral interface: yellow is used for actions, the selected tab and highlights, never as a large background. Where the action color is used as *text* it is darkened until it reaches 4.5 : 1.
-- **BOSS Red** is the existing look. Its muted / dim text colors were lightened slightly (they were below 4.5 : 1 on the dark surfaces); nothing else changed.
-- The default for people who have not chosen a theme is Yellow. Existing users therefore see Yellow, not the old dark red look, until they pick BOSS Red.
+- **Names:** Golden Hour (default), Porcelain, Amethyst, Crimson, Sapphire, Evergreen, Ember, Midnight. Each shows the short description of its palette under the name in the selector. The ids kept in the account preference and the cookie did not change (`yellow`, `white`, `purple`, `red`, `blue`, `green`, `orange`, `midnight`), so every saved choice still works.
+- **Palettes refined so the name is true** (a test measures hue and lightness of each):
+  - **Golden Hour**: soft cream surfaces, yellow used for actions and highlights, and *deep navy* accents, text and bars (it had brown-gold accents before). Yellow used as text is darkened until readable.
+  - **Porcelain**: white and soft gray with *ink-black* accents and actions (the accent was blue before; hyperlinks stay blue for recognisability).
+  - **Amethyst**: unchanged (violet, lavender accent, violet-tinted neutrals).
+  - **Crimson**: the BOSS brand red `#cf0e38` on *deep burgundy* surfaces with a muted rose accent. **This replaces the earlier red theme that kept the original navy-and-cyan dark look**, because navy surfaces do not fit "deep burgundy". If you still want the original navy look as a theme, it can be added as a ninth skin.
+  - **Sapphire**: rich blue on a cool white page, framed by a deep navy navbar, tabs and sidebar; the accent is now deep navy.
+  - **Evergreen**: natural green with muted sage tabs, sidebar and selections on a neutral page; the accent is a sage green.
+  - **Ember**: orange actions with an amber accent on charcoal.
+  - **Midnight**: deep navy, a more electric blue primary and a softer cyan accent.
+- The default for people who have not chosen a theme is Golden Hour. Existing users therefore see Golden Hour, not the old dark look, until they pick another skin.
 - The theme is per account (not per device); a browser's cookie is only the first-paint hint and the account's choice wins after sign-in.
 - Fixed on purpose: the voucher document is white paper in every theme; the profile-menu BUSINESS / BETA badges and the share-dialog avatar colors are fixed identity colors. The AIS pages (not in the navigation) use the same tokens but their chart series colors were left as they were.
 - The app is laid out at least 960 px wide (existing `min-width`), so on narrower screens the page scrolls sideways as before; the theme menu is pinned to the screen there.
 - Database: one new additive table, `boss_user_preferences`; apply it to the standby as well (see `docs/OPERATIONS.md`). No environment variables.
-- `docs/DESIGN_NOTES.md` describes the original sampled colors; they now live in the BOSS Red theme.
+- `docs/DESIGN_NOTES.md` describes the original sampled colors; the closest theme is now Crimson (brand red) on burgundy.

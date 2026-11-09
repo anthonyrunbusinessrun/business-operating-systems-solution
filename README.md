@@ -201,16 +201,19 @@ details, voucher details) is added to **fresh databases only**.
 A palette button in the navbar, between the search box and the account menu, opens the **Skin Library**: eight coordinated
 themes, applied to the whole system at once (no reload) and saved to the signed-in account.
 
-| Theme | Direction | Primary | Page | Text on it |
-| --- | --- | --- | --- | --- |
-| **BOSS Yellow** (default) | light, warm neutral backgrounds, yellow as the action color | `#f5be00` | `#faf8f1` | dark |
-| **BOSS White** | clean, minimal; ink-black actions | `#111827` | `#ffffff` | dark |
-| **BOSS Purple** | deep violet | `#7c3aed` | `#140c22` | light |
-| **BOSS Red** | the original BOSS look, value for value | `#cf0e38` | `#051424` | light |
-| **BOSS Blue** | light workspace framed by a dark blue navbar, tabs and sidebar | `#1d4ed8` | `#f6f8fc` | dark (light on the frame) |
-| **BOSS Green** | balanced green on neutral backgrounds | `#15803d` | `#f7f8f5` | dark |
-| **BOSS Orange** | warm orange on dark neutral components | `#f97316` | `#131315` | light |
-| **BOSS Midnight** | deep navy with bright accents | `#2f5fe8` | `#070c1f` | light |
+| Theme | Palette | Primary | Page |
+| --- | --- | --- | --- |
+| **Golden Hour** (default) | warm yellow, soft cream and deep navy accents; light | `#f5be00` | `#faf8f1` |
+| **Porcelain** | clean white, soft gray and ink-black accents; light | `#111827` | `#ffffff` |
+| **Amethyst** | deep violet, lavender and balanced neutral tones; dark | `#7c3aed` | `#140c22` |
+| **Crimson** | bold red, deep burgundy and subtle dark accents; dark | `#cf0e38` | `#180a0f` |
+| **Sapphire** | rich blue and cool white, framed by a deep navy navbar, tabs and sidebar; light | `#1d4ed8` | `#f6f8fc` |
+| **Evergreen** | natural green, muted sage and neutral backgrounds; light | `#17713b` | `#f6f8f3` |
+| **Ember** | warm orange, amber and charcoal accents; dark | `#f97316` | `#131315` |
+| **Midnight** | deep navy, electric blue and subtle cyan accents; dark | `#2b5cff` | `#070c1f` |
+
+The theme ids stored in the account preference and the cookie are stable keys (`yellow`, `white`, `purple`, `red`, `blue`, `green`,
+`orange`, `midnight`, in the order above); only the names people see changed, so nothing saved is lost.
 
 **How it is built**
 
@@ -239,7 +242,7 @@ themes, applied to the whole system at once (no reload) and saved to the signed-
 | `src/server/base/features.test.ts` | real PostgreSQL: automatic codes (incl. 12 parallel creates), Forms Style (Work / Vouchers), the fixed voucher PDF and removal of PDF generation, server filtering parity with the browser |
 | original suites | AIS accounting logic, table state, record forms |
 | `qa/e2e-update2.py` | browser: Create menu, automatic Code, the fixed voucher PDF (shown for every row, download, nothing generated), form categories, filtering in every view type, server-side filtering |
-| `src/lib/theme/theme.test.ts` | the eight themes, token completeness, WCAG AA for every text / button / status / chip pair in every theme (and Blue's dark chrome), Yellow's "professional" rules, Red's original values, theme CSS and id validation |
+| `src/lib/theme/theme.test.ts` | the eight themes and their names / descriptions, each palette matching its name (hues and lightness), token completeness, WCAG AA for every text / button / status / chip pair in every theme (and Sapphire's dark chrome), Golden Hour's cream / navy rules, Crimson's burgundy, theme CSS and id validation, no leftover generic names |
 | `src/server/base/preferences.test.ts` | real PostgreSQL: saving / reading the theme per account, validation, sign-in and same-site rules, retired ids, a database without the table |
 | `qa/e2e-theme.py` | browser: selector placement and keyboard use, all 8 themes applied without reload, components following the tokens, persistence across reload / login / tabs, failed saves, bad cookies, screen sizes, rendered contrast in every theme |
 | `qa/base-e2e.py` | browser: navigation, all view types, create / rename / duplicate / delete, sections and drag-and-drop, favorites, inline editing, fields, forms, Team Profile, Folio, Voucher, Items, Capabilities |

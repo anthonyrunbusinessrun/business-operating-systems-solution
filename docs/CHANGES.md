@@ -136,9 +136,9 @@ API routes for records, fields and sections now match only their exact path. Pre
 
 # Update 9: Skin Library (themes)
 
-- New navbar theme selector (between search and account) with 8 themes: BOSS Yellow (default), White, Purple, Red, Blue, Green, Orange, Midnight. Applied instantly, saved per account, restored at sign-in.
+- New navbar theme selector (between search and account) with 8 themes: Golden Hour (default), Porcelain, Amethyst, Crimson, Sapphire, Evergreen, Ember, Midnight. Applied instantly, saved per account, restored at sign-in.
 - Colors are centralised in `src/lib/theme/themes.ts` and emitted as CSS variables. About 450 hardcoded colors in the stylesheets and components were replaced with theme tokens (all 11 module stylesheets, `globals.css`, chip palettes `tones.ts` / `fields.ts`, view icon colors, the Gantt arrows, the Multiplexer pages, the AIS charts). Dead CSS of the removed bill-of-lading preview and PDF viewer was deleted.
-- BOSS Red reproduces the previous look value for value; its muted / dim text was lightened only where it was below 4.5 : 1.
+- The red theme first reproduced the previous navy look; Update 10 turns it into Crimson (burgundy).
 - New: `boss_user_preferences` table, `GET` / `PUT /api/base/preferences`, theme cookie, `ThemeProvider` / `ThemeSelector` / `ThemeStyles`.
 - Sidebar and navbar have their own tokens (`--bg-sidebar`, `--bg-navbar`, `--navbar-border`).
 - Browser tests made independent of today's date (the calendar tests assumed October 2026) and updated for the Multiplexer tab.
@@ -154,3 +154,21 @@ API routes for records, fields and sections now match only their exact path. Pre
 | `python3 qa/base-e2e.py` | 66 / 66 |
 | `npm run test:auth` | passes |
 | Rendered contrast audit (every visible text element, 8 themes, 14 screens and overlays) | 22,343 elements checked, 0 below 4.5 : 1 |
+
+# Update 10: Theme Library names
+
+- The eight themes are now called **Golden Hour** (default), **Porcelain**, **Amethyst**, **Crimson**, **Sapphire**, **Evergreen**, **Ember** and **Midnight**; each shows its palette description under the name in the selector (up to two lines). The preview swatches, the selected-theme indicator, theme switching and the saved preference are unchanged. The stored theme ids did not change, so existing preferences keep working.
+- Palettes refined to match their names: Golden Hour (cream, navy accents and text), Porcelain (ink-black accents), Crimson (deep burgundy surfaces with the brand red), Sapphire (deep navy accent), Evergreen (muted sage), Ember (amber accent), Midnight (more electric blue, softer cyan). Details in NEEDS_CLARIFICATION section 15.
+- Tests: names and descriptions, hue / lightness checks that each palette matches its name, WCAG AA for every pair, and a guard that the old generic names do not reappear.
+
+## Results of the checks that were run (Update 10)
+| Command | Result |
+| --- | --- |
+| `npm run lint` | passes |
+| `npm test` | 239 / 239 pass (53 theme tests) |
+| `npm run build` | passes |
+| `python3 qa/e2e-theme.py` | 18 / 18 |
+| `python3 qa/e2e-update2.py` | 36 / 36 |
+| `python3 qa/base-e2e.py` | 66 / 66 |
+| `npm run test:auth` | passes |
+| Rendered contrast audit (every visible text element, 8 themes, 14 screens and overlays) | 22,448 elements checked, 0 below 4.5 : 1 |

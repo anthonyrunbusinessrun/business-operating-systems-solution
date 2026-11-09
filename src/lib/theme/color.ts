@@ -61,3 +61,16 @@ export function ensureContrast(fg: string, bgs: string | string[], min = 4.5): s
   }
   return target;
 }
+
+/** Hue (0-360), saturation and lightness (0-1) of a "#rrggbb" color. */
+export function hsl(hex: string): { h: number; s: number; l: number } {
+  const [r, g, b] = parseHex(hex).map((v) => v / 255);
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  const l = (max + min) / 2;
+  const d = max - min;
+  if (d === 0) return { h: 0, s: 0, l };
+  const s = d / (1 - Math.abs(2 * l - 1));
+  const h = max === r ? ((g - b) / d) % 6 : max === g ? (b - r) / d + 2 : (r - g) / d + 4;
+  return { h: Math.round(((h * 60) + 360) % 360), s, l };
+}

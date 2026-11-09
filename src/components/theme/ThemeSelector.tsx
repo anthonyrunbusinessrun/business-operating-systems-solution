@@ -8,7 +8,7 @@ import type { ThemeDef } from "@/lib/theme/themes";
 import { useTheme } from "./ThemeProvider";
 import styles from "./theme.module.css";
 
-const PANEL_WIDTH = 318;
+const PANEL_WIDTH = 344;
 
 /** A tiny picture of a theme: its page, a card, the primary action and the accent. */
 function Swatch({ t }: { t: ThemeDef }) {

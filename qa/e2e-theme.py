@@ -11,7 +11,8 @@ from playwright.sync_api import sync_playwright, expect
 BASE = os.environ.get("BOSS_URL", "http://localhost:3100")
 CHROME = os.environ.get("CHROME_PATH", "/opt/pw-browsers/chromium-1194/chrome-linux/chrome")
 EMAIL, PASSWORD = os.environ.get("BOSS_E2E_EMAIL", "admin@example.test"), os.environ.get("BOSS_E2E_PASSWORD", "local-test-password")
-THEMES = [("yellow", "BOSS Yellow"), ("white", "BOSS White"), ("purple", "BOSS Purple"), ("red", "BOSS Red"), ("blue", "BOSS Blue"), ("green", "BOSS Green"), ("orange", "BOSS Orange"), ("midnight", "BOSS Midnight")]
+THEMES = [("yellow", "Golden Hour"), ("white", "Porcelain"), ("purple", "Amethyst"), ("red", "Crimson"), ("blue", "Sapphire"), ("green", "Evergreen"), ("orange", "Ember"), ("midnight", "Midnight")]
+DESCRIPTIONS = {"yellow": "Warm yellow, soft cream, and deep navy accents.", "white": "Clean white, soft gray, and ink-black accents.", "purple": "Deep violet, lavender, and balanced neutral tones.", "red": "Bold red, deep burgundy, and subtle dark accents.", "blue": "Rich blue, cool white, and deep navy accents.", "green": "Natural green, muted sage, and neutral backgrounds.", "orange": "Warm orange, amber, and charcoal accents.", "midnight": "Deep navy, electric blue, and subtle cyan accents."}
 IDS = [t for t, _ in THEMES]
 results, console_errors = [], []
 
@@ -125,12 +126,12 @@ with sync_playwright() as pw:
     def default_theme():
         assert theme_attr() == "yellow", theme_attr()
         assert var("--primary") == "#f5be00" and var("--bg-app") == "#faf8f1"
-        assert "BOSS Yellow" in selector_btn().get_attribute("aria-label")
+        assert "Golden Hour" in selector_btn().get_attribute("aria-label")
         assert saved_theme() is None, "nothing saved until the person chooses"
         assert page.locator('html[data-theme="yellow"]').count() == 1
         txt = context.request.get(BASE + "/actions").text()
         assert 'data-theme="yellow"' in txt, "the server renders the default theme: no flash"
-    check("A person who never chose a theme gets BOSS Yellow (rendered by the server, nothing saved)", default_theme)
+    check("A person who never chose a theme gets Golden Hour (rendered by the server, nothing saved)", default_theme)
 
     # ------------------------------------------------------------------ 3. menu
     def menu():
@@ -146,11 +147,16 @@ with sync_playwright() as pw:
         assert checked == ["yellow"], checked
         for o in opts.all():
             sw = o.locator("span").first.bounding_box(); assert sw["width"] >= 30 and sw["height"] >= 20, "each option shows a color preview"
+            tid = o.get_attribute("data-theme-option")
+            desc = o.inner_text().split("\n")[1]
+            assert desc == DESCRIPTIONS[tid], (tid, desc)
+            # the description may wrap onto two lines but must never be clipped
+            assert not o.evaluate("e => { const d = e.querySelectorAll('span')[7]; return d.scrollHeight > d.clientHeight + 1; }"), ("description is clipped", tid)
         box = page.get_by_role("dialog", name="Theme library").bounding_box(); vp = page.viewport_size
         assert box["x"] >= 0 and box["x"] + box["width"] <= vp["width"] and box["y"] + box["height"] <= vp["height"]
         page.keyboard.press("Escape"); expect(page.get_by_role("dialog", name="Theme library")).to_have_count(0)
         sb.click(); page.mouse.click(500, 500); expect(page.get_by_role("dialog", name="Theme library")).to_have_count(0)
-    check("Selector opens a menu with the 8 themes, name + color preview, the active one marked; Esc and outside click close it", menu)
+    check("Selector opens a menu with the 8 themes (name, short description, color preview), the active one marked; Esc and outside click close it", menu)
 
     def keyboard():
         selector_btn().focus(); page.keyboard.press("Enter")
@@ -218,7 +224,7 @@ with sync_playwright() as pw:
         pbg = panel.evaluate("e => getComputedStyle(e).backgroundColor"); assert pbg == hex_rgb(var("--bg-surface")) and lum(pbg) > 0.9, "the menu opened from the dark navbar is a light popover"
         assert lum(panel.get_by_role("menuitemradio").first.evaluate("e => getComputedStyle(e.querySelector('span:nth-child(2) span')).color")) < 0.3, "its text is dark"
         page.keyboard.press("Escape"); choose("yellow")
-    check("BOSS Blue: dark blue navbar / tabs / sidebar with light text frame a light workspace; popovers from the navbar stay light", chrome_theme)
+    check("Sapphire: dark navy navbar / tabs / sidebar with light text frame a light workspace; popovers from the navbar stay light", chrome_theme)
 
     # ------------------------------------------------------------------ 6. consistency across tabs and views
     def across_pages():
