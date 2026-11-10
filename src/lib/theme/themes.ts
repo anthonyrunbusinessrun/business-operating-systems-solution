@@ -11,12 +11,29 @@ import { contrast, ensureContrast, mix, readableOn, rgba } from "./color";
  * Components never hardcode colors: they use the variables. `themeCss()` emits one `[data-theme="…"]` block per theme.
  */
 
-export const THEME_IDS = ["yellow", "white", "purple", "red", "blue", "green", "orange", "midnight"] as const;
+export const THEME_IDS = ["yellow", "white", "purple", "blue", "midnight"] as const;
 export type ThemeId = (typeof THEME_IDS)[number];
 export const DEFAULT_THEME: ThemeId = "yellow";
 export const THEME_COOKIE = "boss-theme";
 
 export const isThemeId = (v: unknown): v is ThemeId => typeof v === "string" && (THEME_IDS as readonly string[]).includes(v);
+
+/**
+ * Themes that were released and later removed. An account or browser that saved one of them still holds the old id, so it is
+ * mapped to the closest remaining theme instead of falling back to nothing: the red theme becomes Midnight (the original BOSS
+ * navy and red), the green and orange themes become the default. Only reading uses this; saving accepts current ids only.
+ */
+const RETIRED_THEMES = new Map<string, ThemeId>([
+  ["red", "midnight"],
+  ["green", "yellow"],
+  ["orange", "yellow"],
+]);
+
+/** A stored or received theme id as a current theme id, or null when it is neither current nor a known retired one. */
+export function resolveThemeId(value: unknown): ThemeId | null {
+  if (isThemeId(value)) return value;
+  return typeof value === "string" ? (RETIRED_THEMES.get(value) ?? null) : null;
+}
 
 /** Hues of the badge / tag palette (the choice colors of select fields). */
 export const TONE_NAMES = ["blue", "cyan", "green", "yellow", "orange", "red", "pink", "purple", "gray"] as const;
@@ -280,22 +297,6 @@ const SPECS: Spec[] = [
     shadowInk: "#000000",
   },
   {
-    id: "red",
-    name: "Crimson",
-    description: "Bold red, deep burgundy, and subtle dark accents.",
-    scheme: "dark",
-    surfaces: { page: "#12060a", app: "#180a0f", navbar: "#230d15", tabs: "#180a0f", sidebar: "#1e0c13", surface: "#261019", inset: "#1d0b12", raised: "#331823", input: "#1d0b12", rowAlt: "#1b0b11", selected: "#4a1626" },
-    borders: { subtle: "#442030", strong: "#5e2e42", hover: "#8f4a63", divider: "#321623", dividerSoft: "#2a121d" },
-    text: { primary: "#ffffff", cell: "#fbf1f3", body: "#f0e2e6", secondary: "#c8adb6", dim: "#b79aa2", muted: "#ab8d96", icon: "#d9a7b6" },
-    primary: { base: "#cf0e38", hover: "#dc2040", dark: "#b70f36", on: "#ffffff" },
-    accent: "#e6a1b2",
-    solid: "#8f1d3a",
-    link: "#f0a4b8",
-    status: { success: "#4ade80", warning: "#fbbf24", danger: "#ff7a85", info: "#7dd3fc" },
-    overlay: "#ffffff",
-    shadowInk: "#000000",
-  },
-  {
     id: "blue",
     name: "Sapphire",
     description: "Rich blue, cool white, and deep navy accents.",
@@ -321,52 +322,34 @@ const SPECS: Spec[] = [
     },
   },
   {
-    id: "green",
-    name: "Evergreen",
-    description: "Natural green, muted sage, and neutral backgrounds.",
-    scheme: "light",
-    surfaces: { page: "#e9eee6", app: "#f6f8f3", navbar: "#ffffff", tabs: "#e6eee2", sidebar: "#eef3ea", surface: "#ffffff", inset: "#eef3ea", raised: "#e2eadd", input: "#ffffff", rowAlt: "#f8faf5", selected: "#d6e7d3" },
-    borders: { subtle: "#d3dccf", strong: "#b2c2ac", hover: "#83997b", divider: "#e1e8dd", dividerSoft: "#ebf0e8" },
-    text: { primary: "#0f1a12", cell: "#16221a", body: "#1f2d23", secondary: "#4b5d50", dim: "#566a5b", muted: "#607466", icon: "#3f6a4c" },
-    primary: { base: "#17713b", hover: "#12602f", dark: "#0e4d26", on: "#ffffff" },
-    accent: "#4f7a5a",
-    solid: "#2f6b4a",
-    link: "#0b6e5e",
-    status: { success: "#15803d", warning: "#b45309", danger: "#c62828", info: "#1d5fa8" },
-    overlay: "#0f1a12",
-    shadowInk: "#0f1a12",
-  },
-  {
-    id: "orange",
-    name: "Ember",
-    description: "Warm orange, amber, and charcoal accents.",
-    scheme: "dark",
-    surfaces: { page: "#0e0e10", app: "#131315", navbar: "#19191c", tabs: "#131315", sidebar: "#161618", surface: "#1c1c20", inset: "#151518", raised: "#26262b", input: "#151518", rowAlt: "#17171a", selected: "#3a2415" },
-    borders: { subtle: "#2f2f35", strong: "#45454d", hover: "#6b6b75", divider: "#25252a", dividerSoft: "#1f1f23" },
-    text: { primary: "#ffffff", cell: "#f4f4f5", body: "#e4e4e7", secondary: "#a8a8b2", dim: "#9696a1", muted: "#8b8b96", icon: "#d2a86a" },
-    primary: { base: "#f97316", hover: "#fb8a3c", dark: "#ea6a0a", on: "#1a0c00" },
-    accent: "#fbbf24",
-    solid: "#c2410c",
-    link: "#f6c177",
-    status: { success: "#4ade80", warning: "#fbbf24", danger: "#f87171", info: "#7dd3fc" },
-    overlay: "#ffffff",
-    shadowInk: "#000000",
-  },
-  {
+    // The original BOSS look: deep navy surfaces, the brand red for actions, bright cyan accents.
     id: "midnight",
     name: "Midnight",
-    description: "Deep navy, electric blue, and subtle cyan accents.",
+    description: "Deep navy, bold red, and bright cyan accents.",
     scheme: "dark",
-    surfaces: { page: "#050816", app: "#070c1f", navbar: "#0a1128", tabs: "#070c1f", sidebar: "#080e24", surface: "#0e1733", inset: "#0a1129", raised: "#17224a", input: "#0a1129", rowAlt: "#0a112a", selected: "#16275a" },
-    borders: { subtle: "#1e2b5a", strong: "#30427f", hover: "#4c66c4", divider: "#16204a", dividerSoft: "#111a3d" },
-    text: { primary: "#ffffff", cell: "#f1f5ff", body: "#dce4fa", secondary: "#9fadd8", dim: "#8c9bcb", muted: "#8293c6", icon: "#8fb0ff" },
-    primary: { base: "#2b5cff", hover: "#2450e0", dark: "#1e43c0", on: "#ffffff" },
-    accent: "#5cc8e0",
-    solid: "#2450e0",
-    link: "#7aa7ff",
-    status: { success: "#34d399", warning: "#fbbf24", danger: "#f87171", info: "#38bdf8" },
+    surfaces: { page: "#050a1a", app: "#051424", navbar: "#0b1f3a", tabs: "#05102a", sidebar: "#0b1f3a", surface: "#0b1f3a", inset: "#0d1a31", raised: "#14213a", input: "#0f172a", rowAlt: "#0b1220", selected: "#152d41" },
+    borders: { subtle: "#1e3a5f", strong: "#2f4a72", hover: "#3a6aa8", divider: "#172c4b", dividerSoft: "#14233d" },
+    text: { primary: "#ffffff", cell: "#f2f5fa", body: "#e2e8f0", secondary: "#94a3b8", dim: "#6b8fad", muted: "#64748b", icon: "#9ac0da" },
+    primary: { base: "#cf0e38", hover: "#dc2040", dark: "#b70f36", on: "#ffffff" },
+    accent: "#00ecfc",
+    solid: "#1d4f93",
+    link: "#5a9fca",
+    status: { success: "#22c55e", warning: "#f5b800", danger: "#ef4444", info: "#3a86c8" },
     overlay: "#ffffff",
     shadowInk: "#000000",
+    exact: {
+      "accent-bg": "#052a3a",
+      "navbar-border": "#0b1f3a", // the original navbar had no bottom border
+      "tone-blue-bg": "#10305c", "tone-blue-fg": "#9cc7ff", "tone-blue-border": "#1d4f93",
+      "tone-cyan-bg": "#08404b", "tone-cyan-fg": "#7be9f5", "tone-cyan-border": "#0e6b7b",
+      "tone-green-bg": "#0f3d2a", "tone-green-fg": "#74e0a5", "tone-green-border": "#1a6a49",
+      "tone-yellow-bg": "#453a0b", "tone-yellow-fg": "#f4d96a", "tone-yellow-border": "#7a6613",
+      "tone-orange-bg": "#4b2509", "tone-orange-fg": "#ffb26b", "tone-orange-border": "#8a4510",
+      "tone-red-bg": "#4d0f1f", "tone-red-fg": "#ff8ea3", "tone-red-border": "#8c1a35",
+      "tone-pink-bg": "#4a1240", "tone-pink-fg": "#ff9be3", "tone-pink-border": "#80206f",
+      "tone-purple-bg": "#2f1f66", "tone-purple-fg": "#c4b0ff", "tone-purple-border": "#4f35a6",
+      "tone-gray-bg": "#273448", "tone-gray-fg": "#c3cedd", "tone-gray-border": "#3d4d66",
+    },
   },
 ];
 
@@ -396,7 +379,8 @@ export const THEMES: ThemeDef[] = SPECS.map((s) => {
 });
 
 export function getTheme(id: string | null | undefined): ThemeDef {
-  return THEMES.find((t) => t.id === id) ?? THEMES.find((t) => t.id === DEFAULT_THEME)!;
+  const resolved = resolveThemeId(id) ?? DEFAULT_THEME;
+  return THEMES.find((t) => t.id === resolved)!;
 }
 
 /** Re-exported for the contrast audit. */

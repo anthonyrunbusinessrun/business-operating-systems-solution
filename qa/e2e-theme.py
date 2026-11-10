@@ -11,8 +11,8 @@ from playwright.sync_api import sync_playwright, expect
 BASE = os.environ.get("BOSS_URL", "http://localhost:3100")
 CHROME = os.environ.get("CHROME_PATH", "/opt/pw-browsers/chromium-1194/chrome-linux/chrome")
 EMAIL, PASSWORD = os.environ.get("BOSS_E2E_EMAIL", "admin@example.test"), os.environ.get("BOSS_E2E_PASSWORD", "local-test-password")
-THEMES = [("yellow", "Golden Hour"), ("white", "Porcelain"), ("purple", "Amethyst"), ("red", "Crimson"), ("blue", "Sapphire"), ("green", "Evergreen"), ("orange", "Ember"), ("midnight", "Midnight")]
-DESCRIPTIONS = {"yellow": "Warm yellow, soft cream, and deep navy accents.", "white": "Clean white, soft gray, and ink-black accents.", "purple": "Deep violet, lavender, and balanced neutral tones.", "red": "Bold red, deep burgundy, and subtle dark accents.", "blue": "Rich blue, cool white, and deep navy accents.", "green": "Natural green, muted sage, and neutral backgrounds.", "orange": "Warm orange, amber, and charcoal accents.", "midnight": "Deep navy, electric blue, and subtle cyan accents."}
+THEMES = [("yellow", "Golden Hour"), ("white", "Porcelain"), ("purple", "Amethyst"), ("blue", "Sapphire"), ("midnight", "Midnight")]
+DESCRIPTIONS = {"yellow": "Warm yellow, soft cream, and deep navy accents.", "white": "Clean white, soft gray, and ink-black accents.", "purple": "Deep violet, lavender, and balanced neutral tones.", "blue": "Rich blue, cool white, and deep navy accents.", "midnight": "Deep navy, bold red, and bright cyan accents."}
 IDS = [t for t, _ in THEMES]
 results, console_errors = [], []
 
@@ -140,7 +140,7 @@ with sync_playwright() as pw:
         sb.click(); expect(page.get_by_role("dialog", name="Theme library")).to_be_visible()
         assert sb.get_attribute("aria-expanded") == "true"
         opts = page.get_by_role("menuitemradio")
-        assert opts.count() == 8
+        assert opts.count() == 5
         names = [o.locator("span").nth(4).inner_text() if False else o.inner_text().split("\n")[0] for o in opts.all()]
         assert names == [n for _, n in THEMES], names
         checked = [o.get_attribute("data-theme-option") for o in opts.all() if o.get_attribute("aria-checked") == "true"]
@@ -156,7 +156,7 @@ with sync_playwright() as pw:
         assert box["x"] >= 0 and box["x"] + box["width"] <= vp["width"] and box["y"] + box["height"] <= vp["height"]
         page.keyboard.press("Escape"); expect(page.get_by_role("dialog", name="Theme library")).to_have_count(0)
         sb.click(); page.mouse.click(500, 500); expect(page.get_by_role("dialog", name="Theme library")).to_have_count(0)
-    check("Selector opens a menu with the 8 themes (name, short description, color preview), the active one marked; Esc and outside click close it", menu)
+    check("Selector opens a menu with the 5 themes (name, short description, color preview), the active one marked; Esc and outside click close it", menu)
 
     def keyboard():
         selector_btn().focus(); page.keyboard.press("Enter")
@@ -166,9 +166,9 @@ with sync_playwright() as pw:
         page.keyboard.press("End"); assert page.evaluate("document.activeElement.dataset.themeOption") == "midnight"
         page.keyboard.press("ArrowDown"); assert page.evaluate("document.activeElement.dataset.themeOption") == "yellow", "wraps around"
         page.keyboard.press("Home"); page.keyboard.press("ArrowUp"); assert page.evaluate("document.activeElement.dataset.themeOption") == "midnight"
-        page.keyboard.press("ArrowUp"); assert page.evaluate("document.activeElement.dataset.themeOption") == "orange"
+        page.keyboard.press("ArrowUp"); assert page.evaluate("document.activeElement.dataset.themeOption") == "blue"
         page.keyboard.press("ArrowUp"); page.keyboard.press("Enter"); page.wait_for_timeout(300)
-        assert theme_attr() == "green", theme_attr()
+        assert theme_attr() == "purple", theme_attr()
         choose("yellow"); assert theme_attr() == "yellow"
     check("Selector works with the keyboard (arrows, Home / End, Enter) and has proper roles", keyboard)
 
@@ -187,7 +187,7 @@ with sync_playwright() as pw:
             page.keyboard.press("Escape")
         assert len(navigations) == start, "switching themes never navigated"
         choose("yellow")
-    check("Switching through all 8 themes applies at once, without a reload, and the active one is always marked", switching)
+    check("Switching through all 5 themes applies at once, without a reload, and the active one is always marked", switching)
 
     # ------------------------------------------------------------------ 5. whole system uses the tokens
     def components_follow():
@@ -209,7 +209,7 @@ with sync_playwright() as pw:
             assert dlg.evaluate("e => getComputedStyle(e).backgroundColor") == exp("--bg-surface"), (tid, "modal / drawer")
             page.keyboard.press("Escape"); page.wait_for_timeout(300)
         choose("yellow")
-    check("Navbar, tabs, sidebar, buttons, popovers and drawers all take their colors from the selected theme (all 8)", components_follow)
+    check("Navbar, tabs, sidebar, buttons, popovers and drawers all take their colors from the selected theme (all 5)", components_follow)
 
     def chrome_theme():
         choose("blue")
@@ -241,15 +241,15 @@ with sync_playwright() as pw:
 
     # ------------------------------------------------------------------ 7. persistence
     def persistence():
-        choose("green")
-        assert saved_theme() == "green", "saved to the account"
+        choose("blue")
+        assert saved_theme() == "blue", "saved to the account"
         page.reload(wait_until="load"); page.wait_for_selector("aside[aria-label=Views]")
-        assert theme_attr() == "green"
+        assert theme_attr() == "blue"
         html = context.request.get(BASE + "/forms").text()
-        assert 'data-theme="green"' in html, "the next page is rendered in the saved theme by the server (no flash)"
-        go("/vouchers"); assert theme_attr() == "green"
+        assert 'data-theme="blue"' in html, "the next page is rendered in the saved theme by the server (no flash)"
+        go("/vouchers"); assert theme_attr() == "blue"
         row = browser_db_row()
-        assert row == "green", row
+        assert row == "blue", row
     def browser_db_row(): return saved_theme()
     check("The choice is saved to the account, survives a reload and is rendered by the server on the next page", persistence)
 
@@ -275,9 +275,9 @@ with sync_playwright() as pw:
 
     def two_tabs():
         second = context.new_page(); go("/profiles", second)
-        choose("orange"); page.wait_for_timeout(300)
+        choose("purple"); page.wait_for_timeout(300)
         second.wait_for_timeout(500)
-        assert theme_attr(second) == "orange", theme_attr(second)
+        assert theme_attr(second) == "purple", theme_attr(second)
         choose("yellow"); second.wait_for_timeout(500); assert theme_attr(second) == "yellow"
         second.close()
     check("Other open browser tabs follow the change at once", two_tabs)
@@ -292,10 +292,31 @@ with sync_playwright() as pw:
         for raw in ["boss-theme=yellow;}body{display:none", 'boss-theme="red"', "boss-theme=", "boss-theme=" + "a" * 3000]:
             ctx = browser.new_context(extra_http_headers={"Cookie": raw}); pg = ctx.new_page()
             r = pg.goto(BASE + "/sign-in", wait_until="load")
-            assert r.status < 500 and theme_attr(pg) in ("yellow", "red"), (raw[:30], r.status, theme_attr(pg))
+            assert r.status < 500 and theme_attr(pg) in ("yellow", "midnight"), (raw[:30], r.status, theme_attr(pg))
             assert pg.evaluate("getComputedStyle(document.body).display") != "none"
             ctx.close()
     check("An unknown or malicious theme cookie falls back to the default theme", bad_cookie)
+
+    def retired_themes():
+        # a browser (or account) that saved a theme that has since been removed: red -> Midnight (the original BOSS look), green / orange -> Golden Hour
+        for old, now in [("red", "midnight"), ("green", "yellow"), ("orange", "yellow")]:
+            ctx = browser.new_context(); ctx.add_cookies([{"name": "boss-theme", "value": old, "url": BASE}]); pg = ctx.new_page()
+            pg.goto(BASE + "/sign-in", wait_until="load"); assert theme_attr(pg) == now, (old, theme_attr(pg))
+            ctx.close()
+        for old in ["red", "green", "orange", "crimson", "ember", "evergreen"]:
+            assert api_put(old).status == 422, f"{old} cannot be chosen any more"
+        assert page.get_by_role("menuitemradio").count() == 0
+        selector_btn().click(); names = [o.inner_text().split("\n")[0] for o in page.get_by_role("menuitemradio").all()]; page.keyboard.press("Escape")
+        assert not {"Crimson", "Evergreen", "Ember"} & set(names), names
+    check("A saved cookie of a removed theme still renders (red as Midnight, green / orange as Golden Hour); removed themes cannot be chosen", retired_themes)
+
+    def midnight_is_original():
+        go("/actions"); choose("midnight")
+        assert var("--primary") == "#cf0e38" and var("--accent") == "#00ecfc" and var("--bg-app") == "#051424" and var("--bg-surface") == "#0b1f3a"
+        assert css("header", "backgroundColor") == "rgb(11, 31, 58)" and css("body", "backgroundColor") == "rgb(5, 10, 26)"
+        assert page.get_by_role("button", name="New action").evaluate("e => getComputedStyle(e).backgroundColor") == "rgb(207, 14, 56)"
+        choose("yellow")
+    check("Midnight is the original BOSS look: deep navy surfaces with the brand red and cyan accents", midnight_is_original)
 
     def save_fails():
         go("/actions")
@@ -361,7 +382,7 @@ with sync_playwright() as pw:
                 go(path); audit(path)
         assert not problems, problems[:8]
         choose("yellow")
-    check("Rendered text reaches WCAG AA (4.5:1) in all 8 themes on 12 screens, popovers and drawers", contrast_everywhere)
+    check("Rendered text reaches WCAG AA (4.5:1) in all 5 themes on 12 screens, popovers and drawers", contrast_everywhere)
 
     # ------------------------------------------------------------------ 11. existing functionality still works while themed
     def functional():

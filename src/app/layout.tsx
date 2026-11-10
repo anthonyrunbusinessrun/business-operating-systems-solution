@@ -4,7 +4,7 @@ import "@fontsource-variable/inter";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { ThemeStyles } from "@/components/theme/ThemeStyles";
-import { DEFAULT_THEME, THEME_COOKIE, getTheme, isThemeId, type ThemeId } from "@/lib/theme/themes";
+import { DEFAULT_THEME, THEME_COOKIE, getTheme, resolveThemeId, type ThemeId } from "@/lib/theme/themes";
 
 export const metadata: Metadata = {
   title: { default: "BOSS", template: "%s · BOSS" },
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 /** The theme this browser last used (a cookie the theme selector writes). Anything unknown falls back to the default. */
 async function themeFromCookie(): Promise<ThemeId> {
   const value = (await cookies()).get(THEME_COOKIE)?.value;
-  return isThemeId(value) ? value : DEFAULT_THEME;
+  return resolveThemeId(value) ?? DEFAULT_THEME;
 }
 
 /** The browser's own UI (mobile address bar) takes the navbar color of the theme. */

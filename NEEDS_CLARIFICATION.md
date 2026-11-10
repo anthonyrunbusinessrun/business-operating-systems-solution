@@ -160,19 +160,13 @@ It still appears in three places, on purpose:
 
 ## 15. Skin Library (themes)
 
-- **Names:** Golden Hour (default), Porcelain, Amethyst, Crimson, Sapphire, Evergreen, Ember, Midnight. Each shows the short description of its palette under the name in the selector. The ids kept in the account preference and the cookie did not change (`yellow`, `white`, `purple`, `red`, `blue`, `green`, `orange`, `midnight`), so every saved choice still works.
-- **Palettes refined so the name is true** (a test measures hue and lightness of each):
-  - **Golden Hour**: soft cream surfaces, yellow used for actions and highlights, and *deep navy* accents, text and bars (it had brown-gold accents before). Yellow used as text is darkened until readable.
-  - **Porcelain**: white and soft gray with *ink-black* accents and actions (the accent was blue before; hyperlinks stay blue for recognisability).
-  - **Amethyst**: unchanged (violet, lavender accent, violet-tinted neutrals).
-  - **Crimson**: the BOSS brand red `#cf0e38` on *deep burgundy* surfaces with a muted rose accent. **This replaces the earlier red theme that kept the original navy-and-cyan dark look**, because navy surfaces do not fit "deep burgundy". If you still want the original navy look as a theme, it can be added as a ninth skin.
-  - **Sapphire**: rich blue on a cool white page, framed by a deep navy navbar, tabs and sidebar; the accent is now deep navy.
-  - **Evergreen**: natural green with muted sage tabs, sidebar and selections on a neutral page; the accent is a sage green.
-  - **Ember**: orange actions with an amber accent on charcoal.
-  - **Midnight**: deep navy, a more electric blue primary and a softer cyan accent.
-- The default for people who have not chosen a theme is Golden Hour. Existing users therefore see Golden Hour, not the old dark look, until they pick another skin.
+- **Five themes:** Golden Hour (default), Porcelain, Amethyst, Sapphire, Midnight. Each shows the short description of its palette under the name in the selector. The ids kept in the account preference and the cookie are `yellow`, `white`, `purple`, `blue`, `midnight`.
+- **Removed themes:** Crimson (burgundy), Evergreen (green) and Ember (orange) were removed on request. A saved choice of one of them is read as its replacement: Crimson (`red`) as **Midnight**, Evergreen (`green`) and Ember (`orange`) as **Golden Hour**. Nothing in the database is rewritten; the old id is replaced the next time the person picks a theme. Choosing a removed id through the API is refused.
+- **Midnight is the original BOSS look** (the navy surfaces with the brand red `#cf0e38` and cyan accent `#00ecfc`, the colors the app had before the Skin Library), value for value. Only the muted and dim text tiers are lightened slightly where they were below 4.5 : 1 (WCAG AA). Anyone who had chosen the earlier electric-blue Midnight now sees this navy-and-red look under the same name.
+- **Palettes:** Golden Hour has soft cream surfaces, yellow used for actions and highlights, and deep navy accents, text and bars (yellow used as text is darkened until readable). Porcelain is white and soft gray with ink-black accents and actions (hyperlinks stay blue). Amethyst is violet with a lavender accent. Sapphire is a rich blue on a cool white page, framed by a deep navy navbar, tabs and sidebar. A test measures hue and lightness of each palette against its name.
+- The default for people who have not chosen a theme is Golden Hour. Existing users therefore see Golden Hour, not the old dark look, until they pick another skin (Midnight brings the old look back).
 - The theme is per account (not per device); a browser's cookie is only the first-paint hint and the account's choice wins after sign-in.
 - Fixed on purpose: the voucher document is white paper in every theme; the profile-menu BUSINESS / BETA badges and the share-dialog avatar colors are fixed identity colors. The AIS pages (not in the navigation) use the same tokens but their chart series colors were left as they were.
 - The app is laid out at least 960 px wide (existing `min-width`), so on narrower screens the page scrolls sideways as before; the theme menu is pinned to the screen there.
 - Database: one new additive table, `boss_user_preferences`; apply it to the standby as well (see `docs/OPERATIONS.md`). No environment variables.
-- `docs/DESIGN_NOTES.md` describes the original sampled colors; the closest theme is now Crimson (brand red) on burgundy.
+- `docs/DESIGN_NOTES.md` describes the original sampled colors; they are the Midnight theme.

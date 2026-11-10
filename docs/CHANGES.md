@@ -172,3 +172,22 @@ API routes for records, fields and sections now match only their exact path. Pre
 | `python3 qa/base-e2e.py` | 66 / 66 |
 | `npm run test:auth` | passes |
 | Rendered contrast audit (every visible text element, 8 themes, 14 screens and overlays) | 22,448 elements checked, 0 below 4.5 : 1 |
+
+# Update 11: five themes; Midnight is the original BOSS look
+
+- Removed the **Crimson**, **Evergreen** and **Ember** themes. The library has five: Golden Hour (default), Porcelain, Amethyst, Sapphire, Midnight.
+- **Midnight** now has the original BOSS palette (deep navy surfaces, brand red, cyan accent), value for value, with its description updated ("Deep navy, bold red, and bright cyan accents.").
+- Saved ids of removed themes are read as a replacement (`red` as Midnight, `green` / `orange` as Golden Hour) by the server, the cookie reader and the account lookup; saving a removed id is refused. No database rewrite.
+- Tests: the five names and descriptions, removed themes absent, retired ids resolving (including `__proto__` / `constructor` style keys), Midnight equal to the original colors, and the same checks in the browser suite.
+
+## Results of the checks that were run (Update 11)
+| Command | Result |
+| --- | --- |
+| `npm run lint` | passes |
+| `npm test` | 227 / 227 pass |
+| `npm run build` | passes |
+| `python3 qa/e2e-theme.py` | 20 / 20 |
+| `python3 qa/e2e-update2.py` | 36 / 36 |
+| `python3 qa/base-e2e.py` | 66 / 66 |
+| `npm run test:auth` | passes |
+| Rendered contrast audit (every visible text element, 5 themes, 14 screens and overlays) | 14,516 elements checked, 0 below 4.5 : 1 |

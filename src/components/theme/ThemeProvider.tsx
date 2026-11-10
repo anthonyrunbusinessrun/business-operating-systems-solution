@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
-import { DEFAULT_THEME, THEMES, THEME_COOKIE, getTheme, isThemeId, type ThemeDef, type ThemeId } from "@/lib/theme/themes";
+import { DEFAULT_THEME, THEMES, THEME_COOKIE, getTheme, isThemeId, resolveThemeId, type ThemeDef, type ThemeId } from "@/lib/theme/themes";
 
 const STORAGE_KEY = "boss-theme";
 
@@ -70,9 +70,10 @@ export function ThemeProvider({ initialTheme, children }: { initialTheme: ThemeI
   // other browser tabs of the same person follow the change
   useEffect(() => {
     const onStorage = (e: StorageEvent) => {
-      if (e.key === STORAGE_KEY && isThemeId(e.newValue) && e.newValue !== idRef.current) {
-        document.documentElement.dataset.theme = e.newValue;
-        setId(e.newValue);
+      const next = e.key === STORAGE_KEY ? resolveThemeId(e.newValue) : null;
+      if (next && next !== idRef.current) {
+        document.documentElement.dataset.theme = next;
+        setId(next);
       }
     };
     window.addEventListener("storage", onStorage);
