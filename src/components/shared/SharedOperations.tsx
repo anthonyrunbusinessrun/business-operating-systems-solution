@@ -1,6 +1,7 @@
 "use client";
 import { useState, type FormEvent } from "react";
 import Link from "next/link";
+import { parseOrderLines } from "@/lib/order-entry";
 import type { SharedCommand } from "@/lib/shared-contract";
 import { useSharedOperations } from "./useSharedOperations";
 
@@ -29,8 +30,10 @@ export function SharedOperations({
     useSharedOperations(base);
   const [tab, setTab] = useState<Tab>("orders"),
     [action, setAction] = useState("createOrder"),
-    [notice, setNotice] = useState("");
+    [notice, setNotice] = useState(""),
+    [contextOrderId, setContextOrderId] = useState("");
   const data = snapshot?.data;
+  const contextOrder = data?.orders.find(o => o.id === contextOrderId);
   const rows = (tab === "outbox" ? snapshot?.outbox : data?.[tab]) ?? [];
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -39,62 +42,65 @@ export function SharedOperations({
     const str = (name: string) => String(f.get(name) ?? "").trim();
     const num = (name: string) => Number(str(name));
     let command: SharedCommand;
-    switch (action) {
-      case "savePartner":
-        command = {
-          action,
-          partner: {
-            id: str("id"),
-            name: str("name"),
-            site: str("site"),
-            email: str("email"),
-            mobile: str("mobile"),
-          },
-        };
-        break;
-      case "saveProduct":
-        command = {
-          action,
-          product: {
-            sku: str("sku"),
-            name: str("name"),
-            unit: str("unit"),
-            location: str("location"),
-            reorderPoint: num("reorderPoint"),
-          },
-        };
-        break;
-      case "receiveStock":
-        command = { action, sku: str("sku"), qty: num("qty") };
-        break;
-      case "saveShipment":
-        command = {
-          action,
-          id: str("id"),
-          carrier: str("carrier"),
-          tracking: str("tracking"),
-          eta: new Date(str("due")).getTime(),
-        };
-        break;
-      default:
-        command = {
-          action: "createOrder",
-          partnerId: str("partnerId"),
-          reference: str("reference"),
-          due: new Date(str("due")).getTime(),
-          lines: str("lines")
-            .split("\n")
-            .filter(Boolean)
-            .map((line) => {
-              const [sku, qty] = line.split(",");
-              return { sku: (sku ?? "").trim(), qty: Number(qty) };
-            }),
-        };
-    }
+    const context = {
+      ...(str("destinationName") || str("city") || str("region") || str("country") ? { shipTo: { name: str("destinationName"), city: str("city"), region: str("region"), country: str("country").toUpperCase() } } : {}),
+      sourceNote: str("sourceNote"),
+      testOnly: f.get("testOnly") === "on",
+    };
     try {
+      switch (action) {
+        case "updateOrderContext":
+          command = { action, id: contextOrderId, ...context };
+          break;
+        case "savePartner":
+          command = {
+            action,
+            partner: {
+              id: str("id"),
+              name: str("name"),
+              site: str("site"),
+              email: str("email"),
+              mobile: str("mobile"),
+            },
+          };
+          break;
+        case "saveProduct":
+          command = {
+            action,
+            product: {
+              sku: str("sku"),
+              name: str("name"),
+              unit: str("unit"),
+              location: str("location"),
+              reorderPoint: num("reorderPoint"),
+            },
+          };
+          break;
+        case "receiveStock":
+          command = { action, sku: str("sku"), qty: num("qty") };
+          break;
+        case "saveShipment":
+          command = {
+            action,
+            id: str("id"),
+            carrier: str("carrier"),
+            tracking: str("tracking"),
+            eta: new Date(str("due")).getTime(),
+          };
+          break;
+        default:
+          command = {
+            action: "createOrder",
+            ...context,
+            partnerId: str("partnerId"),
+            reference: str("reference"),
+            due: new Date(str("due")).getTime(),
+            lines: parseOrderLines(str("lines")),
+          };
+      }
       const result = await dispatch(command);
       setNotice(result.message);
-      form.reset();
+      if (action !== "updateOrderContext") form.reset();
     } catch (e) {
       setNotice(e instanceof Error ? e.message : "Save failed");
     }
@@ -104,11 +110,13 @@ export function SharedOperations({
     label: string,
     type = "text",
     required = true,
+    defaultValue?: string,
   ) => (
     <label key={name}>
       {label}
       <input
         name={name}
+        defaultValue={defaultValue}
         type={type}
         required={required}
         maxLength={300}
@@ -153,13 +161,20 @@ export function SharedOperations({
           Operation
           <select value={action} onChange={(e) => setAction(e.target.value)}>
             <option value="createOrder">Create order</option>
+            <option value="updateOrderContext">Update order context</option>
             <option value="savePartner">Save partner</option>
             <option value="saveProduct">Save product</option>
             <option value="receiveStock">Receive stock</option>
             <option value="saveShipment">Set shipment tracking</option>
           </select>
         </label>
-        <form key={action} onSubmit={submit}>
+        {action === "updateOrderContext" && <label>Order to update
+          <select value={contextOrderId} onChange={e => setContextOrderId(e.target.value)}>
+            <option value="">Choose an unreserved order</option>
+            {data?.orders.filter(o => ["new", "short"].includes(o.status)).map(o => <option key={o.id} value={o.id}>{o.id} - {o.reference}</option>)}
+          </select>
+        </label>}
+        <form key={action + contextOrderId} onSubmit={submit}>
           {action === "savePartner" && (
             <>
               {field("id", "Partner ID")}
@@ -202,6 +217,15 @@ export function SharedOperations({
               </label>
             </>
           )}
+          {["createOrder", "updateOrderContext"].includes(action) && <>
+            {field("destinationName", "Destination / receiving site", "text", false, action === "updateOrderContext" ? contextOrder?.shipTo?.name : undefined)}
+            {field("city", "Destination city", "text", false, action === "updateOrderContext" ? contextOrder?.shipTo?.city : undefined)}
+            {field("region", "Destination state / territory", "text", false, action === "updateOrderContext" ? contextOrder?.shipTo?.region : undefined)}
+            {field("country", "Country code (2 letters)", "text", false, action === "updateOrderContext" ? contextOrder?.shipTo?.country : undefined)}
+            {field("sourceNote", "Source and assumptions", "text", false, action === "updateOrderContext" ? contextOrder?.sourceNote : undefined)}
+            <label><span><input name="testOnly" type="checkbox" disabled={action === "updateOrderContext" && contextOrder?.testOnly} defaultChecked={action === "updateOrderContext" && contextOrder?.testOnly} /> Reference-only test order</span></label>
+            <p>Enter all four destination fields together. Reference-only orders cannot reserve stock or create shipments. This designation cannot be removed. Record source pages, provisional units and assumed dates here.</p>
+          </>}
           {action === "receiveStock" && (
             <>
               <label>
@@ -225,7 +249,7 @@ export function SharedOperations({
               {field("due", "Estimated delivery", "date")}
             </>
           )}
-          <button type="submit" disabled={busy || !snapshot}>
+          <button type="submit" disabled={busy || !snapshot || (action === "updateOrderContext" && !contextOrder)}>
             {busy ? "Saving…" : "Save shared data"}
           </button>
         </form>
@@ -265,13 +289,13 @@ export function SharedOperations({
               const id = String(record.id ?? record.sku ?? index);
               return (
                 <tr key={id}>
-                  <td>{String(record.name ?? record.subject ?? id)}</td>
+                  <td>{String(record.name ?? record.subject ?? id)}{record.testOnly === true && <p>REFERENCE ONLY</p>}</td>
                   <td>
                     <pre>{JSON.stringify(item, null, 2)}</pre>
                   </td>
                   <td>
                     {tab === "orders" &&
-                      ["new", "short", "ready"].includes(
+                      !record.testOnly && ["new", "short", "ready"].includes(
                         String(record.status),
                       ) && (
                         <button
