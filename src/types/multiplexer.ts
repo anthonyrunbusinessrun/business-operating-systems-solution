@@ -71,6 +71,9 @@ export interface OrderLine {
   qty: number;
 }
 export interface Order {
+  /** Reference-only fixtures cannot reserve stock or create shipments. */
+  testOnly?: boolean;
+  sourceNote?: string;
   testRun?: string;
   shipTo?: { name: string; city: string; region: string; country: string };
   reference?: string;
